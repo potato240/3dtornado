@@ -366,8 +366,7 @@ RIVER_SEGS.forEach(seg => {
   });
   // visual only — collision handled by single zone below
 });
-// One continuous collision zone covers the whole river — no gaps from meander
-riverBoxes.push({cx:340, cz:0, hw:RIVER_W/2, hd:900});
+// riverBoxes array kept for reference; river is traversable — car sinks instead
 
 // Bridge zones — roads that cross the river stay passable
 const BRIDGE_ZONES = [
@@ -602,6 +601,7 @@ Object.keys(VEHICLES).forEach(k=>{
 // ─── PLAYER ──────────────────────────────────────────────────
 let curVehicle = 'pickup';
 const player = { pos:new THREE.Vector3(-195,0,-8), angle:0, speed:0, money:5000 };
+let sinkTimer = 0;
 
 function parkAllVehicles() {
   const ks = Object.keys(VEHICLES);
@@ -965,21 +965,19 @@ function update(dt){
     }
   }
 
-  // River — blocked except at bridge crossings
+  // River — car sinks partially and drags; player drives back out
   const onBridge = BRIDGE_ZONES.some(bz =>
     Math.abs(player.pos.x-bz.cx)<bz.hw && Math.abs(player.pos.z-bz.cz)<bz.hd);
-  if(!onBridge){
-    for(const box of riverBoxes){
-      const ox=player.pos.x-box.cx, oz=player.pos.z-box.cz;
-      const px=box.hw-Math.abs(ox), pz=box.hd-Math.abs(oz);
-      if(px>0&&pz>0){
-        if(px<pz) player.pos.x+=px*Math.sign(ox); else player.pos.z+=pz*Math.sign(oz);
-        player.speed*=0.1;
-      }
-    }
+  const inRiver = !onBridge && Math.abs(player.pos.x-340)<RIVER_W/2 && Math.abs(player.pos.z)<900;
+  if(inRiver){
+    player.speed *= Math.pow(0.6, dt*60);
+    sinkTimer = Math.min(sinkTimer+dt*2, 1);
+  } else {
+    sinkTimer = Math.max(sinkTimer-dt*4, 0);
   }
+  const carY = -sinkTimer * 0.45;
 
-  vMeshes[curVehicle].position.set(player.pos.x,0,player.pos.z);
+  vMeshes[curVehicle].position.set(player.pos.x, carY, player.pos.z);
   vMeshes[curVehicle].rotation.y=player.angle;
 
   // Storm machine
