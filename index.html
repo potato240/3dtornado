@@ -380,6 +380,7 @@ for (let i=0;i<140;i++){const a=Math.random()*Math.PI*2,r=25+Math.random()*750;t
 const VEHICLES = {
   pickup:      { name:'Pickup Truck',       maxSpeed:28, accel:18, handling:2.2, canIntercept:false, color:0xcc3322, price:0,     unlocked:true,  armour:1 },
   interceptor: { name:'Basic Interceptor',  maxSpeed:22, accel:14, handling:1.8, canIntercept:true,  color:0x334488, price:0,     unlocked:true,  armour:3 },
+  forester:    { name:'Subaru Forester',    maxSpeed:34, accel:20, handling:2.4, canIntercept:false, color:0x5577aa, price:2000,  unlocked:false, armour:2 },
   ram:         { name:'Dodge Ram',          maxSpeed:40, accel:24, handling:2.6, canIntercept:false, color:0x222222, price:3000,  unlocked:false, armour:2 },
   suv:         { name:'Armoured SUV',       maxSpeed:32, accel:16, handling:2.0, canIntercept:true,  color:0x3a4a30, price:5000,  unlocked:false, armour:4 },
   tiv2:        { name:'TIV-2',             maxSpeed:26, accel:15, handling:1.6, canIntercept:true,  color:0x2a3a4a, price:10000, unlocked:false, armour:5 },
@@ -495,12 +496,42 @@ function mkDominator(color) {
   return g;
 }
 
+function mkForester(color) {
+  const g=new THREE.Group();
+  const mat=new THREE.MeshLambertMaterial({color}), dark=new THREE.MeshLambertMaterial({color:0x111111}),
+        glass=new THREE.MeshLambertMaterial({color:0x334466,transparent:true,opacity:0.65}),
+        silver=new THREE.MeshLambertMaterial({color:0x999999});
+  // Body — boxy compact SUV
+  const body=new THREE.Mesh(new THREE.BoxGeometry(2.0,0.75,4.2),mat); body.position.y=0.72; body.castShadow=true; g.add(body);
+  // Tall roomy cab (Forester is known for headroom)
+  const cab=new THREE.Mesh(new THREE.BoxGeometry(1.9,1.05,2.6),mat); cab.position.set(0,1.6,0.1); cab.castShadow=true; g.add(cab);
+  // Windscreen
+  const wind=new THREE.Mesh(new THREE.BoxGeometry(1.78,0.8,0.1),glass); wind.position.set(0,1.65,-1.2); g.add(wind);
+  // Rear window
+  const rwind=new THREE.Mesh(new THREE.BoxGeometry(1.78,0.7,0.1),glass); rwind.position.set(0,1.6,1.4); g.add(rwind);
+  // Roof rack rails
+  [-0.7,0.7].forEach(x=>{
+    const rail=new THREE.Mesh(new THREE.BoxGeometry(0.06,0.06,2.2),silver); rail.position.set(x,2.15,0.1); g.add(rail);});
+  // Roof rack crossbars
+  [-0.4,0.4].forEach(z=>{
+    const bar=new THREE.Mesh(new THREE.BoxGeometry(1.44,0.06,0.06),silver); bar.position.set(0,2.18,z); g.add(bar);});
+  // Subtle side cladding (grey plastic trim)
+  [1.05,-1.05].forEach(x=>{
+    const cl=new THREE.Mesh(new THREE.BoxGeometry(0.08,0.3,3.8),new THREE.MeshLambertMaterial({color:0x444444})); cl.position.set(x,0.5,0.1); g.add(cl);});
+  // Wheels — slightly larger than sedan
+  const wGeo=new THREE.CylinderGeometry(0.47,0.47,0.34,10);
+  [[1.1,0.47,1.35],[-1.1,0.47,1.35],[1.1,0.47,-1.35],[-1.1,0.47,-1.35]].forEach(([x,y,z])=>{
+    const w=new THREE.Mesh(wGeo,dark); w.rotation.z=Math.PI/2; w.position.set(x,y,z); g.add(w);});
+  return g;
+}
+
 const vMeshes = {};
 Object.keys(VEHICLES).forEach(k=>{
   const v=VEHICLES[k];
   let mesh;
   if (k==='pickup')      mesh=mkPickup(v.color);
   else if (k==='interceptor') mesh=mkInterceptor(v.color);
+  else if (k==='forester') mesh=mkForester(v.color);
   else if (k==='ram')    mesh=mkRam(v.color);
   else if (k==='suv')    mesh=mkSUV(v.color);
   else if (k==='tiv2')   mesh=mkTIV2(v.color);
