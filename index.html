@@ -124,6 +124,104 @@
     opacity: 0; transition: opacity 0.4s;
     pointer-events: none;
   }
+
+  /* ── START SCREEN ── */
+  #start-screen {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 60%, #1a2540 0%, #0a0d14 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    transition: opacity 0.7s ease;
+    color: white;
+  }
+  #start-screen.fade-out { opacity: 0; pointer-events: none; }
+
+  #start-title {
+    font-size: clamp(36px, 8vw, 80px);
+    font-weight: bold;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #fff;
+    text-shadow: 0 0 40px rgba(120,160,255,0.6), 0 0 80px rgba(80,120,220,0.3);
+    margin-bottom: 6px;
+  }
+  #start-subtitle {
+    font-size: clamp(13px, 2vw, 18px);
+    color: #8ab0dd;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    margin-bottom: 50px;
+  }
+
+  #start-tornado-icon {
+    font-size: 72px;
+    margin-bottom: 30px;
+    animation: spin-slow 4s linear infinite;
+    display: block;
+  }
+  @keyframes spin-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+  #start-cards {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 48px;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 620px;
+  }
+  .start-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 8px;
+    padding: 14px 20px;
+    font-size: 13px;
+    color: #bbc8db;
+    min-width: 140px;
+    text-align: center;
+    line-height: 1.6;
+  }
+  .start-card .card-icon { font-size: 22px; display: block; margin-bottom: 6px; }
+  .start-card strong { color: #fff; display: block; margin-bottom: 4px; }
+
+  #start-btn {
+    background: linear-gradient(135deg, #2255cc, #1133aa);
+    border: 2px solid rgba(100,150,255,0.5);
+    border-radius: 8px;
+    color: #fff;
+    font-family: 'Courier New', monospace;
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: 3px;
+    padding: 16px 52px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+    box-shadow: 0 0 30px rgba(50,100,255,0.3);
+    margin-bottom: 18px;
+  }
+  #start-btn:hover {
+    background: linear-gradient(135deg, #3366ee, #2244cc);
+    box-shadow: 0 0 50px rgba(80,130,255,0.5);
+    transform: scale(1.04);
+  }
+  #start-btn:active { transform: scale(0.98); }
+
+  #start-controls {
+    display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;
+  }
+  .ctrl-hint {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 4px;
+    padding: 5px 12px;
+    font-size: 12px;
+    color: #99aabb;
+  }
+  .ctrl-hint span { color: #ddeeff; font-weight: bold; }
 </style>
 </head>
 <body>
@@ -174,6 +272,44 @@
   </div>
 
   <div id="score-popup"></div>
+</div>
+
+<div id="start-screen">
+  <span id="start-tornado-icon">🌪</span>
+  <div id="start-title">Tornado Chase</div>
+  <div id="start-subtitle">Storm Intercept Simulator</div>
+
+  <div id="start-cards">
+    <div class="start-card">
+      <span class="card-icon">🚗</span>
+      <strong>Chase</strong>
+      Drive toward storms and drop probes in the tornado's path
+    </div>
+    <div class="start-card">
+      <span class="card-icon">📡</span>
+      <strong>Probe</strong>
+      Score $500–$2000 based on how close the tornado passes
+    </div>
+    <div class="start-card">
+      <span class="card-icon">🛡</span>
+      <strong>Intercept</strong>
+      Use the armoured interceptor to drive inside the tornado for bonus cash
+    </div>
+    <div class="start-card">
+      <span class="card-icon">⚙</span>
+      <strong>Garage</strong>
+      Swap vehicles at the yellow garage building
+    </div>
+  </div>
+
+  <button id="start-btn">START CHASING</button>
+
+  <div id="start-controls">
+    <div class="ctrl-hint"><span>WASD</span> Drive</div>
+    <div class="ctrl-hint"><span>E</span> Drop Probe</div>
+    <div class="ctrl-hint"><span>G</span> Garage</div>
+    <div class="ctrl-hint"><span>Tab</span> Camera</div>
+  </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -589,6 +725,7 @@ function popup(text, color='#ffee44') {
 // UPDATE
 // ─────────────────────────────────────────
 function update(dt) {
+  if (!gameStarted) return;
   dt = Math.min(dt, 0.05);
   const veh = VEHICLES[curVehicle];
 
@@ -753,6 +890,19 @@ window.addEventListener('resize', () => {
   followCam.aspect=topCam.aspect=window.innerWidth/window.innerHeight;
   followCam.updateProjectionMatrix(); topCam.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+// ─────────────────────────────────────────
+// START SCREEN
+// ─────────────────────────────────────────
+let gameStarted = false;
+
+document.getElementById('start-btn').addEventListener('click', () => {
+  const screen = document.getElementById('start-screen');
+  screen.classList.add('fade-out');
+  screen.addEventListener('transitionend', () => screen.remove(), { once: true });
+  gameStarted = true;
+  clock.getDelta(); // discard any accumulated dt
 });
 
 animate();
