@@ -799,7 +799,7 @@ const keys={};
 document.addEventListener('keydown',e=>{
   if(keys[e.code])return; keys[e.code]=true;
   if(e.code==='Tab'){e.preventDefault();toggleCam();}
-  if(e.code==='KeyE')dropProbe();
+  if(e.code==='KeyE')handleProbeKey();
   if(e.code==='KeyG'){if(shopOpen)closeShop();else tryGarage();}
   if(e.code==='Escape')closeShop();
 });
@@ -810,6 +810,21 @@ function toggleCam(){
   activeCamera=camMode==='follow'?followCam:topCam;
   activeCamera.aspect=window.innerWidth/window.innerHeight; activeCamera.updateProjectionMatrix();
   document.getElementById('cam-mode').textContent=camMode==='follow'?'FOLLOW':'TOP-DOWN';
+}
+function handleProbeKey(){
+  if(probe.deployed && !probe.scored){
+    const dx=player.pos.x-probe.pos.x, dz=player.pos.z-probe.pos.z;
+    if(Math.sqrt(dx*dx+dz*dz)<10){
+      pickUpProbe(); return;
+    }
+  }
+  dropProbe();
+}
+function pickUpProbe(){
+  probe.deployed=false; probeMesh.visible=false; probeRing.visible=false;
+  document.getElementById('probe-status').textContent='READY';
+  document.getElementById('probe-status').style.color='';
+  popup('Probe retrieved','#88aaff');
 }
 function dropProbe(){
   if(probe.deployed)return;
