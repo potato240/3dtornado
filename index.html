@@ -763,10 +763,10 @@ function update(dt) {
 
   player.speed += throttle*veh.accel*dt;
   player.speed *= Math.pow(0.97, dt*60);
-  player.speed  = Math.max(-veh.maxSpeed*0.4, Math.min(veh.maxSpeed * speedMult, player.speed));
+  player.speed  = Math.max(-veh.maxSpeed*0.4, Math.min(veh.maxSpeed, player.speed));
   if (Math.abs(player.speed)>0.5) player.angle += turn*veh.handling*dt*Math.sign(player.speed);
-  player.pos.x += Math.sin(player.angle)*player.speed*dt;
-  player.pos.z += Math.cos(player.angle)*player.speed*dt;
+  player.pos.x += Math.sin(player.angle)*player.speed*speedMult*dt;
+  player.pos.z += Math.cos(player.angle)*player.speed*speedMult*dt;
   player.pos.x  = Math.max(-940, Math.min(940, player.pos.x));
   player.pos.z  = Math.max(-940, Math.min(940, player.pos.z));
 
