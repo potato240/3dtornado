@@ -35,6 +35,7 @@
   #tornado-timer {
     font-size: 28px; font-weight: bold; font-variant-numeric: tabular-nums;
     margin-top: 4px; min-height: 36px; letter-spacing: 1px;
+    display: none;
   }
   #tornado-timer.urgent { animation: pulse-red 0.6s ease-in-out infinite; }
   @keyframes pulse-red { 0%,100%{color:#ff4444;} 50%{color:#ff9900;} }
@@ -336,6 +337,56 @@ for (let z=-150; z<=150; z+=50) road(0,z,320,9);
 for (let x=-150; x<=150; x+=50) road(x,0,9,320);
 road(0,250,520,10); road(0,-250,520,10);
 road(250,0,10,520); road(-250,0,10,520);
+
+// ─── RIVER ───────────────────────────────────────────────────
+const waterMat = new THREE.MeshLambertMaterial({
+  color: 0x1a4a82,
+  polygonOffset:true, polygonOffsetFactor:-2, polygonOffsetUnits:-2
+});
+const bankMat = new THREE.MeshLambertMaterial({
+  color: 0x8a7a58,
+  polygonOffset:true, polygonOffsetFactor:-1, polygonOffsetUnits:-1
+});
+const RIVER_W = 22, SEG_LEN = 150;
+const RIVER_SEGS = [
+  {x:338,z:-825},{x:347,z:-675},{x:334,z:-525},{x:343,z:-375},
+  {x:340,z:-225},{x:342,z:-75}, {x:338,z:75},  {x:345,z:225},
+  {x:348,z:375}, {x:342,z:525}, {x:337,z:675}, {x:343,z:825},
+];
+const riverBoxes = [];
+RIVER_SEGS.forEach(seg => {
+  const wm = new THREE.Mesh(new THREE.PlaneGeometry(RIVER_W, SEG_LEN), waterMat);
+  wm.rotation.x = -Math.PI/2; wm.position.set(seg.x, 0.03, seg.z);
+  scene.add(wm);
+  [-1,1].forEach(side => {
+    const bm = new THREE.Mesh(new THREE.PlaneGeometry(5, SEG_LEN), bankMat);
+    bm.rotation.x = -Math.PI/2;
+    bm.position.set(seg.x + side*(RIVER_W/2+2.5), 0.01, seg.z);
+    scene.add(bm);
+  });
+  riverBoxes.push({cx:seg.x, cz:seg.z, hw:RIVER_W/2, hd:SEG_LEN/2});
+});
+
+// Bridge zones — roads that cross the river stay passable
+const BRIDGE_ZONES = [
+  {cx:340, cz:0,    hw:RIVER_W/2+3, hd:10}, // main E-W highway
+  {cx:340, cz:350,  hw:RIVER_W/2+3, hd:9 }, // north ring road
+  {cx:340, cz:-350, hw:RIVER_W/2+3, hd:9 }, // south ring road
+];
+const bDeckMat = new THREE.MeshLambertMaterial({color:0x383838,
+  polygonOffset:true, polygonOffsetFactor:-5, polygonOffsetUnits:-5});
+const bRailMat = new THREE.MeshLambertMaterial({color:0x999999});
+BRIDGE_ZONES.forEach(bz => {
+  const deck = new THREE.Mesh(new THREE.PlaneGeometry(RIVER_W+6, bz.hd*2), bDeckMat);
+  deck.rotation.x = -Math.PI/2; deck.position.set(bz.cx, 0.06, bz.cz);
+  scene.add(deck);
+  roadBoxes.push({cx:bz.cx, cz:bz.cz, hw:RIVER_W/2+3, hd:bz.hd});
+  [-1,1].forEach(side => {
+    const rail = new THREE.Mesh(new THREE.BoxGeometry(0.5,1.2,bz.hd*2-0.4), bRailMat);
+    rail.position.set(bz.cx + side*(RIVER_W/2+2.8), 0.65, bz.cz);
+    scene.add(rail);
+  });
+});
 
 // ─── BUILDINGS ───────────────────────────────────────────────
 const bMats = [0xc8b99a,0xa8a8a8,0xd4c5a9,0x8a7a6a,0xb2bcc4].map(c=>new THREE.MeshLambertMaterial({color:c}));
@@ -909,6 +960,20 @@ function update(dt){
     if(px>0&&pz>0){
       if(px<pz) player.pos.x+=px*Math.sign(ox); else player.pos.z+=pz*Math.sign(oz);
       player.speed*=0.1;
+    }
+  }
+
+  // River — blocked except at bridge crossings
+  const onBridge = BRIDGE_ZONES.some(bz =>
+    Math.abs(player.pos.x-bz.cx)<bz.hw && Math.abs(player.pos.z-bz.cz)<bz.hd);
+  if(!onBridge){
+    for(const box of riverBoxes){
+      const ox=player.pos.x-box.cx, oz=player.pos.z-box.cz;
+      const px=box.hw-Math.abs(ox), pz=box.hd-Math.abs(oz);
+      if(px>0&&pz>0){
+        if(px<pz) player.pos.x+=px*Math.sign(ox); else player.pos.z+=pz*Math.sign(oz);
+        player.speed*=0.1;
+      }
     }
   }
 
