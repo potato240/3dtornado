@@ -364,8 +364,10 @@ RIVER_SEGS.forEach(seg => {
     bm.position.set(seg.x + side*(RIVER_W/2+2.5), 0.01, seg.z);
     scene.add(bm);
   });
-  riverBoxes.push({cx:seg.x, cz:seg.z, hw:RIVER_W/2, hd:SEG_LEN/2});
+  // visual only — collision handled by single zone below
 });
+// One continuous collision zone covers the whole river — no gaps from meander
+riverBoxes.push({cx:340, cz:0, hw:RIVER_W/2, hd:900});
 
 // Bridge zones — roads that cross the river stay passable
 const BRIDGE_ZONES = [
