@@ -436,18 +436,49 @@ const tornadoGroup = new THREE.Group();
 tornadoGroup.visible = false;
 scene.add(tornadoGroup);
 
+// Funnel cone — narrow at ground, wide at cloud base
+// Use LatheGeometry to get the classic curved funnel profile
+const funnelPoints = [];
+for (let i = 0; i <= 20; i++) {
+  const t = i / 20;
+  // Classic tornado shape: very narrow near ground, curves outward toward top
+  const r = 0.4 + Math.pow(t, 1.6) * 16;
+  funnelPoints.push(new THREE.Vector2(r, t * 75));
+}
+const funnelGeo = new THREE.LatheGeometry(funnelPoints, 24);
+const funnelMat = new THREE.MeshLambertMaterial({
+  color: 0x4a4a5a, transparent: true, opacity: 0.55, side: THREE.DoubleSide,
+});
+const funnelMesh = new THREE.Mesh(funnelGeo, funnelMat);
+tornadoGroup.add(funnelMesh);
+
+// Inner darker core for depth
+const corePoints = [];
+for (let i = 0; i <= 20; i++) {
+  const t = i / 20;
+  const r = 0.1 + Math.pow(t, 1.8) * 8;
+  corePoints.push(new THREE.Vector2(r, t * 75));
+}
+const coreMesh = new THREE.Mesh(
+  new THREE.LatheGeometry(corePoints, 18),
+  new THREE.MeshLambertMaterial({ color: 0x222230, transparent: true, opacity: 0.7, side: THREE.DoubleSide })
+);
+tornadoGroup.add(coreMesh);
+
+// Spinning texture rings — fewer, just for rotation effect
 const tornadoRings = [];
-for (let i = 0; i < 36; i++) {
-  const t = i/35;
-  const geo = new THREE.TorusGeometry(0.3+t*18, 0.45+t*0.3, 6, 24);
+for (let i = 0; i < 14; i++) {
+  const t = i / 13;
+  const r = 0.4 + Math.pow(t, 1.6) * 16;
+  const geo = new THREE.TorusGeometry(r, 0.3, 5, 22);
   const mat = new THREE.MeshLambertMaterial({
-    color: new THREE.Color(0.24+t*0.14, 0.24+t*0.14, 0.3+t*0.1),
-    transparent:true, opacity: 0.78-t*0.38,
+    color: new THREE.Color(0.28+t*0.1, 0.28+t*0.1, 0.35+t*0.08),
+    transparent: true, opacity: 0.35 - t*0.2,
   });
   const ring = new THREE.Mesh(geo, mat);
-  ring.position.y = t*82;
+  ring.position.y = t * 75;
   tornadoGroup.add(ring);
-  tornadoRings.push({ mesh:ring, spin: 4-t*3.2 });
+  tornadoRings.push({ mesh: ring, spin: 5 - t * 3.5 });
 }
 
 const NDEBRIS = 320;
@@ -466,7 +497,7 @@ tornadoGroup.add(new THREE.Points(dGeo, new THREE.PointsMaterial({ color:0x7a5a2
 const tAI = {
   pos: new THREE.Vector3(400,0,-300),
   heading: Math.PI*0.2+(Math.random()-0.5)*0.6,
-  speed: 8, scale: 0, changeT: 0,
+  speed: 4, scale: 0, changeT: 0,
 };
 
 // ─────────────────────────────────────────
