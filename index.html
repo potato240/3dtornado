@@ -386,11 +386,13 @@ for (let i = 0; i < 50; i++) {
 // ─────────────────────────────────────────
 const roadMat = new THREE.MeshLambertMaterial({ color: 0x2e2e2e,
   polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
+const roadBoxes = [];
 function road(x, z, w, d) {
   const m = new THREE.Mesh(new THREE.PlaneGeometry(w, d), roadMat);
   m.rotation.x = -Math.PI / 2;
   m.position.set(x, 0.02, z);
   scene.add(m);
+  roadBoxes.push({ cx: x, cz: z, hw: w/2, hd: d/2 });
 }
 road(0, 0, 900, 12);
 road(0, 0, 12, 900);
@@ -740,9 +742,14 @@ function update(dt) {
   const throttle = (keys['KeyW']||keys['ArrowUp']  ?1:0)-(keys['KeyS']||keys['ArrowDown'] ?1:0);
   const turn     = (keys['KeyA']||keys['ArrowLeft'] ?1:0)-(keys['KeyD']||keys['ArrowRight']?1:0);
 
+  const onRoad = roadBoxes.some(b =>
+    Math.abs(player.pos.x - b.cx) < b.hw && Math.abs(player.pos.z - b.cz) < b.hd
+  );
+  const speedMult = onRoad ? 2 : 1;
+
   player.speed += throttle*veh.accel*dt;
   player.speed *= Math.pow(0.97, dt*60);
-  player.speed  = Math.max(-veh.maxSpeed*0.4, Math.min(veh.maxSpeed, player.speed));
+  player.speed  = Math.max(-veh.maxSpeed*0.4, Math.min(veh.maxSpeed * speedMult, player.speed));
   if (Math.abs(player.speed)>0.5) player.angle += turn*veh.handling*dt*Math.sign(player.speed);
   player.pos.x += Math.sin(player.angle)*player.speed*dt;
   player.pos.z += Math.cos(player.angle)*player.speed*dt;
