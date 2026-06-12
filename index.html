@@ -9,223 +9,182 @@
   #canvas { display: block; }
 
   #hud {
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    pointer-events: none;
-    color: white;
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none; color: white;
   }
-
-  #top-bar {
-    position: absolute;
-    top: 16px; left: 16px;
-    display: flex; gap: 12px;
-  }
-
+  #top-bar { position: absolute; top: 16px; left: 16px; display: flex; gap: 10px; }
   .hud-panel {
-    background: rgba(0,0,0,0.65);
-    border: 1px solid rgba(255,255,255,0.18);
-    border-radius: 6px;
-    padding: 8px 14px;
-    font-size: 13px;
-    min-width: 110px;
+    background: rgba(0,0,0,0.65); border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 6px; padding: 8px 14px; font-size: 13px; min-width: 100px;
   }
-
   .hud-label { color: #999; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; }
-  .hud-value { color: #fff; font-size: 16px; font-weight: bold; margin-top: 2px; }
+  .hud-value { color: #fff; font-size: 15px; font-weight: bold; margin-top: 2px; }
   .green  { color: #4eff4e !important; }
   .yellow { color: #ffee44 !important; }
   .orange { color: #ff8800 !important; }
   .red    { color: #ff4444 !important; }
 
   #storm-bar {
-    position: absolute;
-    top: 16px; left: 50%; transform: translateX(-50%);
-    background: rgba(0,0,0,0.7);
-    border: 1px solid rgba(255,255,255,0.18);
-    border-radius: 6px;
-    padding: 10px 22px;
-    text-align: center;
-    min-width: 230px;
+    position: absolute; top: 16px; left: 50%; transform: translateX(-50%);
+    background: rgba(0,0,0,0.7); border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 6px; padding: 10px 22px; text-align: center; min-width: 240px;
   }
   #storm-name   { font-size: 11px; color: #999; text-transform: uppercase; letter-spacing: 2px; }
-  #storm-status { font-size: 17px; font-weight: bold; margin-top: 3px; }
+  #storm-status { font-size: 16px; font-weight: bold; margin-top: 3px; }
+  #tornado-type-label { font-size: 11px; color: #aabbdd; margin-top: 2px; min-height: 14px; }
   #progress-bar-bg {
-    width: 190px; height: 6px;
-    background: rgba(255,255,255,0.1);
-    border-radius: 3px;
-    margin: 7px auto 0;
-    overflow: hidden;
+    width: 190px; height: 6px; background: rgba(255,255,255,0.1);
+    border-radius: 3px; margin: 6px auto 0; overflow: hidden;
   }
   #progress-bar { height: 100%; width: 0%; background: #4eff4e; border-radius: 3px; }
 
   #money-display {
-    position: absolute;
-    top: 16px; right: 16px;
-    background: rgba(0,0,0,0.7);
-    border: 1px solid rgba(80,200,80,0.35);
-    border-radius: 6px;
-    padding: 8px 18px;
-    font-size: 22px; font-weight: bold; color: #4eff4e;
+    position: absolute; top: 16px; right: 16px;
+    background: rgba(0,0,0,0.7); border: 1px solid rgba(80,200,80,0.35);
+    border-radius: 6px; padding: 8px 18px; font-size: 22px; font-weight: bold; color: #4eff4e;
   }
-
   #bottom-bar {
-    position: absolute;
-    bottom: 16px; left: 50%; transform: translateX(-50%);
+    position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%);
     display: flex; gap: 8px;
   }
   .key-hint {
-    background: rgba(0,0,0,0.65);
-    border: 1px solid rgba(255,255,255,0.13);
-    border-radius: 4px;
-    padding: 6px 12px;
-    font-size: 12px; color: #bbb;
+    background: rgba(0,0,0,0.65); border: 1px solid rgba(255,255,255,0.13);
+    border-radius: 4px; padding: 6px 12px; font-size: 12px; color: #bbb;
   }
   .key-hint span { color: #fff; font-weight: bold; }
-
   #cam-indicator {
-    position: absolute;
-    bottom: 56px; right: 16px;
-    background: rgba(0,0,0,0.6);
-    border: 1px solid rgba(255,255,255,0.13);
-    border-radius: 4px;
-    padding: 6px 12px;
-    font-size: 12px; color: #bbb;
+    position: absolute; bottom: 56px; right: 16px;
+    background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.13);
+    border-radius: 4px; padding: 6px 12px; font-size: 12px; color: #bbb;
   }
-
   #vehicle-label {
-    position: absolute;
-    bottom: 16px; left: 16px;
-    background: rgba(0,0,0,0.65);
-    border: 1px solid rgba(255,255,255,0.13);
-    border-radius: 4px;
-    padding: 6px 12px;
-    font-size: 13px; color: #ccc;
+    position: absolute; bottom: 16px; left: 16px;
+    background: rgba(0,0,0,0.65); border: 1px solid rgba(255,255,255,0.13);
+    border-radius: 4px; padding: 6px 12px; font-size: 13px; color: #ccc;
   }
   #vehicle-label span { color: #fff; font-weight: bold; }
-
   #garage-prompt {
-    position: absolute;
-    top: 50%; left: 50%; transform: translate(-50%, -50%);
-    background: rgba(0,0,0,0.88);
-    border: 2px solid rgba(255,200,0,0.5);
-    border-radius: 10px;
-    padding: 18px 28px;
-    text-align: center;
-    display: none;
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    background: rgba(0,0,0,0.88); border: 2px solid rgba(255,200,0,0.5);
+    border-radius: 10px; padding: 14px 24px; text-align: center; display: none;
   }
-  #garage-prompt h2 { color: #ffcc00; margin-bottom: 8px; }
+  #garage-prompt h2 { color: #ffcc00; margin-bottom: 6px; font-size: 16px; }
   #garage-prompt p  { color: #ccc; font-size: 13px; }
-
   #score-popup {
-    position: absolute;
-    top: 38%; left: 50%; transform: translate(-50%, -50%);
-    font-size: 26px; font-weight: bold;
-    text-shadow: 0 0 20px currentColor;
-    opacity: 0; transition: opacity 0.4s;
-    pointer-events: none;
+    position: absolute; top: 38%; left: 50%; transform: translate(-50%, -50%);
+    font-size: 26px; font-weight: bold; text-shadow: 0 0 20px currentColor;
+    opacity: 0; transition: opacity 0.4s; pointer-events: none;
   }
+
+  /* ── GARAGE SHOP ── */
+  #garage-shop {
+    position: fixed; inset: 0; z-index: 50;
+    background: rgba(0,0,0,0.93);
+    display: none; flex-direction: column; align-items: center;
+    justify-content: flex-start; padding: 24px 20px 20px;
+    overflow-y: auto; pointer-events: all; color: white;
+  }
+  #garage-shop.open { display: flex; }
+  #shop-header {
+    display: flex; align-items: center; justify-content: space-between;
+    width: 100%; max-width: 900px; margin-bottom: 16px;
+  }
+  #shop-title { font-size: 22px; font-weight: bold; color: #ffcc00; letter-spacing: 2px; }
+  #shop-balance { font-size: 18px; color: #4eff4e; font-weight: bold; }
+  #shop-close-btn {
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 6px; color: #ccc; font-family: 'Courier New', monospace;
+    font-size: 13px; padding: 8px 16px; cursor: pointer;
+  }
+  #shop-close-btn:hover { background: rgba(255,255,255,0.15); color: #fff; }
+  #vehicle-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 14px; width: 100%; max-width: 900px;
+  }
+  .vcard {
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px; padding: 16px; display: flex; flex-direction: column; gap: 10px;
+  }
+  .vcard.active-card { border-color: #ffcc00; background: rgba(255,200,0,0.07); }
+  .vcard.locked-card { opacity: 0.75; }
+  .vcard-name { font-size: 16px; font-weight: bold; color: #fff; }
+  .vcard-badges { display: flex; gap: 6px; flex-wrap: wrap; }
+  .badge {
+    font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: bold;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .badge-intercept { background: #1a3a6a; color: #88aaff; border: 1px solid #334488; }
+  .badge-active    { background: #3a2a00; color: #ffcc00; border: 1px solid #664400; }
+  .badge-owned     { background: #1a3a1a; color: #4eff4e; border: 1px solid #224422; }
+  .vcard-stats { display: flex; flex-direction: column; gap: 5px; }
+  .stat-row { display: flex; align-items: center; gap: 8px; font-size: 11px; color: #999; }
+  .stat-label { width: 60px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .stat-bar-bg { flex: 1; height: 5px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; }
+  .stat-bar { height: 100%; border-radius: 3px; }
+  .vcard-price { font-size: 14px; font-weight: bold; }
+  .price-free  { color: #4eff4e; }
+  .price-cost  { color: #ffcc00; }
+  .price-owned { color: #88aaff; }
+  .vcard-btn {
+    padding: 10px; border-radius: 6px; font-family: 'Courier New', monospace;
+    font-size: 13px; font-weight: bold; cursor: pointer; border: none;
+    text-transform: uppercase; letter-spacing: 1px;
+  }
+  .btn-select  { background: #2255cc; color: #fff; }
+  .btn-select:hover { background: #3366ee; }
+  .btn-buy     { background: #cc8800; color: #fff; }
+  .btn-buy:hover { background: #ee9900; }
+  .btn-cant    { background: rgba(255,255,255,0.06); color: #666; cursor: not-allowed; }
+  .btn-active  { background: rgba(255,200,0,0.15); color: #ffcc00; cursor: default; border: 1px solid #664400; }
 
   /* ── START SCREEN ── */
   #start-screen {
-    position: fixed;
-    inset: 0;
+    position: fixed; inset: 0;
     background: radial-gradient(ellipse at 50% 60%, #1a2540 0%, #0a0d14 100%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 0;
-    overflow-y: auto;
-    padding: 20px;
-    z-index: 100;
-    transition: opacity 0.7s ease;
-    color: white;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    overflow-y: auto; padding: 20px; z-index: 100; transition: opacity 0.7s ease; color: white;
   }
   #start-screen.fade-out { opacity: 0; pointer-events: none; }
-
   #start-title {
-    font-size: clamp(28px, 7vw, 64px);
-    font-weight: bold;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    color: #fff;
+    font-size: clamp(28px, 7vw, 64px); font-weight: bold; letter-spacing: 4px;
+    text-transform: uppercase; color: #fff;
     text-shadow: 0 0 40px rgba(120,160,255,0.6), 0 0 80px rgba(80,120,220,0.3);
     margin-bottom: 4px;
   }
   #start-subtitle {
-    font-size: clamp(11px, 1.5vw, 15px);
-    color: #8ab0dd;
-    letter-spacing: 6px;
-    text-transform: uppercase;
-    margin-bottom: 20px;
+    font-size: clamp(11px, 1.5vw, 15px); color: #8ab0dd; letter-spacing: 6px;
+    text-transform: uppercase; margin-bottom: 20px;
   }
-
   #start-tornado-icon {
-    font-size: 56px;
-    margin-bottom: 14px;
-    animation: spin-slow 4s linear infinite;
-    display: block;
-    line-height: 1;
+    font-size: 56px; margin-bottom: 14px; animation: spin-slow 4s linear infinite;
+    display: block; line-height: 1;
   }
   @keyframes spin-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
   #start-cards {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 24px;
-    flex-wrap: wrap;
-    justify-content: center;
-    max-width: 640px;
+    display: flex; gap: 10px; margin-bottom: 24px; flex-wrap: wrap;
+    justify-content: center; max-width: 640px;
   }
   .start-card {
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.12);
-    border-radius: 8px;
-    padding: 10px 14px;
-    font-size: 12px;
-    color: #bbc8db;
-    min-width: 130px;
-    max-width: 150px;
-    text-align: center;
-    line-height: 1.5;
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 8px; padding: 10px 14px; font-size: 12px; color: #bbc8db;
+    min-width: 130px; max-width: 150px; text-align: center; line-height: 1.5;
   }
   .start-card .card-icon { font-size: 18px; display: block; margin-bottom: 4px; }
   .start-card strong { color: #fff; display: block; margin-bottom: 3px; }
-
   #start-btn {
     background: linear-gradient(135deg, #2255cc, #1133aa);
-    border: 2px solid rgba(100,150,255,0.5);
-    border-radius: 8px;
-    color: #fff;
-    font-family: 'Courier New', monospace;
-    font-size: 18px;
-    font-weight: bold;
-    letter-spacing: 3px;
-    padding: 14px 48px;
-    cursor: pointer;
-    text-transform: uppercase;
+    border: 2px solid rgba(100,150,255,0.5); border-radius: 8px; color: #fff;
+    font-family: 'Courier New', monospace; font-size: 18px; font-weight: bold;
+    letter-spacing: 3px; padding: 14px 48px; cursor: pointer; text-transform: uppercase;
     transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
-    box-shadow: 0 0 30px rgba(50,100,255,0.3);
-    margin-bottom: 14px;
-    flex-shrink: 0;
+    box-shadow: 0 0 30px rgba(50,100,255,0.3); margin-bottom: 14px; flex-shrink: 0;
   }
-  #start-btn:hover {
-    background: linear-gradient(135deg, #3366ee, #2244cc);
-    box-shadow: 0 0 50px rgba(80,130,255,0.5);
-    transform: scale(1.04);
-  }
+  #start-btn:hover { background: linear-gradient(135deg, #3366ee, #2244cc); box-shadow: 0 0 50px rgba(80,130,255,0.5); transform: scale(1.04); }
   #start-btn:active { transform: scale(0.98); }
-
-  #start-controls {
-    display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;
-  }
+  #start-controls { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
   .ctrl-hint {
-    background: rgba(255,255,255,0.07);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 4px;
-    padding: 5px 12px;
-    font-size: 12px;
-    color: #99aabb;
+    background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 4px; padding: 5px 12px; font-size: 12px; color: #99aabb;
   }
   .ctrl-hint span { color: #ddeeff; font-weight: bold; }
 </style>
@@ -256,60 +215,51 @@
   <div id="storm-bar">
     <div id="storm-name">Storm Activity</div>
     <div id="storm-status" style="color:#4eff4e">CLEAR</div>
+    <div id="tornado-type-label"></div>
     <div id="progress-bar-bg"><div id="progress-bar"></div></div>
   </div>
 
   <div id="money-display">$<span id="money-val">5000</span></div>
-
   <div id="cam-indicator">CAM: <span id="cam-mode">FOLLOW</span> — Tab</div>
-
   <div id="vehicle-label">Vehicle: <span id="vehicle-name">Pickup Truck</span></div>
 
   <div id="bottom-bar">
     <div class="key-hint"><span>WASD</span> Drive</div>
     <div class="key-hint"><span>E</span> Drop Probe</div>
-    <div class="key-hint"><span>G</span> Garage (swap vehicle)</div>
+    <div class="key-hint"><span>G</span> Garage</div>
     <div class="key-hint"><span>Tab</span> Camera</div>
   </div>
 
   <div id="garage-prompt">
     <h2>&#9881; GARAGE</h2>
-    <p>Press <strong>G</strong> to swap vehicle</p>
+    <p>Press <strong>G</strong> to open shop</p>
   </div>
 
   <div id="score-popup"></div>
 </div>
 
+<!-- Garage Shop Overlay -->
+<div id="garage-shop">
+  <div id="shop-header">
+    <div id="shop-title">&#9881; GARAGE SHOP</div>
+    <div id="shop-balance">$<span id="shop-money-val">5000</span></div>
+    <button id="shop-close-btn">CLOSE [G]</button>
+  </div>
+  <div id="vehicle-grid"></div>
+</div>
+
+<!-- Start Screen -->
 <div id="start-screen">
   <span id="start-tornado-icon">🌪</span>
   <div id="start-title">Tornado Chase</div>
   <div id="start-subtitle">Storm Intercept Simulator</div>
-
   <div id="start-cards">
-    <div class="start-card">
-      <span class="card-icon">🚗</span>
-      <strong>Chase</strong>
-      Drive toward storms and drop probes in the tornado's path
-    </div>
-    <div class="start-card">
-      <span class="card-icon">📡</span>
-      <strong>Probe</strong>
-      Score $500–$2000 based on how close the tornado passes
-    </div>
-    <div class="start-card">
-      <span class="card-icon">🛡</span>
-      <strong>Intercept</strong>
-      Use the armoured interceptor to drive inside the tornado for bonus cash
-    </div>
-    <div class="start-card">
-      <span class="card-icon">⚙</span>
-      <strong>Garage</strong>
-      Swap vehicles at the yellow garage building
-    </div>
+    <div class="start-card"><span class="card-icon">🚗</span><strong>Chase</strong>Drive toward storms and drop probes in the tornado's path</div>
+    <div class="start-card"><span class="card-icon">📡</span><strong>Probe</strong>Score based on how close the tornado passes over it</div>
+    <div class="start-card"><span class="card-icon">🛡</span><strong>Intercept</strong>Armoured vehicles can sit inside the tornado for bonus cash</div>
+    <div class="start-card"><span class="card-icon">⚙</span><strong>Garage</strong>Buy and swap vehicles — bigger storms mean bigger payouts</div>
   </div>
-
   <button id="start-btn">START CHASING</button>
-
   <div id="start-controls">
     <div class="ctrl-hint"><span>WASD</span> Drive</div>
     <div class="ctrl-hint"><span>E</span> Drop Probe</div>
@@ -320,9 +270,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
-// ─────────────────────────────────────────
-// RENDERER
-// ─────────────────────────────────────────
+// ─── RENDERER ────────────────────────────────────────────────
 const canvas = document.getElementById('canvas');
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
 renderer.setPixelRatio(window.devicePixelRatio);
@@ -333,605 +281,698 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x7ab0d4);
 scene.fog = new THREE.FogExp2(0x7ab0d4, 0.0014);
-
 const clock = new THREE.Clock();
 
-// ─────────────────────────────────────────
-// CAMERAS
-// ─────────────────────────────────────────
-const followCam = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.5, 2000);
-const topCam    = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 1, 3000);
-let activeCamera = followCam;
-let camMode = 'follow';
+// ─── CAMERAS ─────────────────────────────────────────────────
+const followCam = new THREE.PerspectiveCamera(70, window.innerWidth/window.innerHeight, 0.5, 2000);
+const topCam    = new THREE.PerspectiveCamera(55, window.innerWidth/window.innerHeight, 1, 3000);
+let activeCamera = followCam, camMode = 'follow';
 
-// ─────────────────────────────────────────
-// LIGHTING
-// ─────────────────────────────────────────
+// ─── LIGHTING ────────────────────────────────────────────────
 scene.add(new THREE.AmbientLight(0x607090, 0.9));
-
 const sun = new THREE.DirectionalLight(0xfff0e0, 1.2);
-sun.position.set(300, 500, 200);
-sun.castShadow = true;
+sun.position.set(300, 500, 200); sun.castShadow = true;
 sun.shadow.mapSize.set(2048, 2048);
-sun.shadow.camera.near = 1;
-sun.shadow.camera.far = 1500;
 sun.shadow.camera.left = sun.shadow.camera.bottom = -600;
 sun.shadow.camera.right = sun.shadow.camera.top = 600;
+sun.shadow.camera.near = 1; sun.shadow.camera.far = 1500;
 scene.add(sun);
 
-// ─────────────────────────────────────────
-// GROUND
-// ─────────────────────────────────────────
-const ground = new THREE.Mesh(
-  new THREE.PlaneGeometry(2000, 2000),
-  new THREE.MeshLambertMaterial({ color: 0x6b8c42 })
-);
-ground.rotation.x = -Math.PI / 2;
-ground.receiveShadow = true;
-scene.add(ground);
+// ─── GROUND ──────────────────────────────────────────────────
+const ground = new THREE.Mesh(new THREE.PlaneGeometry(2000, 2000),
+  new THREE.MeshLambertMaterial({ color: 0x6b8c42 }));
+ground.rotation.x = -Math.PI/2; ground.receiveShadow = true; scene.add(ground);
 
 for (let i = 0; i < 50; i++) {
   const m = new THREE.Mesh(
-    new THREE.PlaneGeometry(40 + Math.random() * 90, 40 + Math.random() * 90),
-    new THREE.MeshLambertMaterial({ color: Math.random() > 0.5 ? 0x8aac50 : 0x547a2e,
-      polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1 })
-  );
-  m.rotation.x = -Math.PI / 2;
+    new THREE.PlaneGeometry(40+Math.random()*90, 40+Math.random()*90),
+    new THREE.MeshLambertMaterial({ color: Math.random()>0.5?0x8aac50:0x547a2e,
+      polygonOffset:true, polygonOffsetFactor:-1, polygonOffsetUnits:-1 }));
+  m.rotation.x = -Math.PI/2;
   m.position.set((Math.random()-0.5)*1600, 0.01, (Math.random()-0.5)*1600);
   scene.add(m);
 }
 
-// ─────────────────────────────────────────
-// ROADS
-// ─────────────────────────────────────────
+// ─── ROADS ───────────────────────────────────────────────────
 const roadMat = new THREE.MeshLambertMaterial({ color: 0x2e2e2e,
-  polygonOffset: true, polygonOffsetFactor: -4, polygonOffsetUnits: -4 });
+  polygonOffset:true, polygonOffsetFactor:-4, polygonOffsetUnits:-4 });
 const roadBoxes = [];
 function road(x, z, w, d) {
   const m = new THREE.Mesh(new THREE.PlaneGeometry(w, d), roadMat);
-  m.rotation.x = -Math.PI / 2;
-  m.position.set(x, 0.05, z);
-  scene.add(m);
-  roadBoxes.push({ cx: x, cz: z, hw: w/2, hd: d/2 });
+  m.rotation.x = -Math.PI/2; m.position.set(x, 0.05, z); scene.add(m);
+  roadBoxes.push({ cx:x, cz:z, hw:w/2, hd:d/2 });
 }
+road(0,0,1800,14); road(0,0,14,1800);
+road(400,0,14,800); road(-400,0,14,800);
+road(0,350,800,12); road(0,-350,800,12);
+for (let z=-150; z<=150; z+=50) road(0,z,320,9);
+for (let x=-150; x<=150; x+=50) road(x,0,9,320);
+road(0,250,520,10); road(0,-250,520,10);
+road(250,0,10,520); road(-250,0,10,520);
 
-// Main highways
-road(0,    0,  1800, 14); // E-W
-road(0,    0,  14, 1800); // N-S
-road(400,  0,  14,  800); // parallel N-S east
-road(-400, 0,  14,  800); // parallel N-W west
-road(0,  350, 800,  12);  // E-W rural north
-road(0, -350, 800,  12);  // E-W rural south
-
-// Town grid — denser
-for (let z = -150; z <= 150; z += 50) road(0,   z, 320, 9);
-for (let x = -150; x <= 150; x += 50) road(x,   0,   9, 320);
-
-// Outer ring road
-road(  0, 250, 520, 10);
-road(  0,-250, 520, 10);
-road( 250,  0,  10, 520);
-road(-250,  0,  10, 520);
-
-// ─────────────────────────────────────────
-// BUILDINGS
-// ─────────────────────────────────────────
-const bMats = [0xc8b99a,0xa8a8a8,0xd4c5a9,0x8a7a6a,0xb2bcc4].map(
-  c => new THREE.MeshLambertMaterial({ color: c })
-);
-const rMats = [0x444444,0x555544,0x666655].map(
-  c => new THREE.MeshLambertMaterial({ color: c })
-);
-
-const buildingBoxes = []; // {cx, cz, hw, hd} half-extents for collision
+// ─── BUILDINGS ───────────────────────────────────────────────
+const bMats = [0xc8b99a,0xa8a8a8,0xd4c5a9,0x8a7a6a,0xb2bcc4].map(c=>new THREE.MeshLambertMaterial({color:c}));
+const rMats = [0x444444,0x555544,0x666655].map(c=>new THREE.MeshLambertMaterial({color:c}));
+const buildingBoxes = [];
 
 function building(x, z, w, h, d) {
-  const b = new THREE.Mesh(new THREE.BoxGeometry(w,h,d),
-    bMats[Math.floor(Math.random()*bMats.length)]);
-  b.position.set(x, h/2, z); b.castShadow = true; b.receiveShadow = true;
-  scene.add(b);
-  const r = new THREE.Mesh(new THREE.BoxGeometry(w+0.4, 0.35, d+0.4),
-    rMats[Math.floor(Math.random()*rMats.length)]);
-  r.position.set(x, h+0.18, z);
-  scene.add(r);
-  buildingBoxes.push({ cx: x, cz: z, hw: w/2 + 1.5, hd: d/2 + 1.5 });
+  const b = new THREE.Mesh(new THREE.BoxGeometry(w,h,d), bMats[Math.floor(Math.random()*bMats.length)]);
+  b.position.set(x,h/2,z); b.castShadow=true; b.receiveShadow=true; scene.add(b);
+  const r = new THREE.Mesh(new THREE.BoxGeometry(w+0.4,0.35,d+0.4), rMats[Math.floor(Math.random()*rMats.length)]);
+  r.position.set(x,h+0.18,z); scene.add(r);
+  buildingBoxes.push({ cx:x, cz:z, hw:w/2+1.5, hd:d/2+1.5 });
 }
-
-[
-  [-80,-80,18,12,14],[-80,-20,22,8,16],[-80,40,16,10,13],
-  [-20,-80,20,15,18],[-20,-20,26,6,20],[-20,40,18,9,14],
-  [ 40,-80,15,11,15],[ 40,-20,20,7,18],[ 40,40,22,13,16],
-  [150,20,60,5,15],[150,-30,42,5,15],[150,-70,28,5,12],
-  [-150,30,12,4,20],[-170,30,12,4,20],
-  [0,-150,22,18,20],
-  [-185,-100,12,6,10],[-205,-82,10,5,9],[-165,-118,11,5,10],
-  [165,100,10,5,9],[185,120,12,5,10],[145,112,11,5,9],
-  [200,-50,16,7,12],[-200,80,14,6,11],
-].forEach(b => building(...b));
+[[-80,-80,18,12,14],[-80,-20,22,8,16],[-80,40,16,10,13],
+ [-20,-80,20,15,18],[-20,-20,26,6,20],[-20,40,18,9,14],
+ [40,-80,15,11,15],[40,-20,20,7,18],[40,40,22,13,16],
+ [150,20,60,5,15],[150,-30,42,5,15],[150,-70,28,5,12],
+ [-150,30,12,4,20],[-170,30,12,4,20],[0,-150,22,18,20],
+ [-185,-100,12,6,10],[-205,-82,10,5,9],[-165,-118,11,5,10],
+ [165,100,10,5,9],[185,120,12,5,10],[145,112,11,5,9],
+ [200,-50,16,7,12],[-200,80,14,6,11],
+].forEach(b=>building(...b));
 
 // Water tower
-const wtMat = new THREE.MeshLambertMaterial({ color: 0x888899 });
-const wtLeg = new THREE.Mesh(new THREE.CylinderGeometry(0.4,0.4,16,8), wtMat);
+const wtMat = new THREE.MeshLambertMaterial({color:0x888899});
+const wtLeg = new THREE.Mesh(new THREE.CylinderGeometry(0.4,0.4,16,8),wtMat);
 wtLeg.position.set(105,8,-105); scene.add(wtLeg);
-const wtTank = new THREE.Mesh(new THREE.CylinderGeometry(4,4,7,10),
-  new THREE.MeshLambertMaterial({ color:0x5577aa }));
+const wtTank = new THREE.Mesh(new THREE.CylinderGeometry(4,4,7,10),new THREE.MeshLambertMaterial({color:0x5577aa}));
 wtTank.position.set(105,19,-105); scene.add(wtTank);
 
-// ─────────────────────────────────────────
-// GARAGE
-// ─────────────────────────────────────────
-const GARAGE_POS = new THREE.Vector3(-210, 0, 0);
-building(-210, 0, 32, 8, 22);
-const signMesh = new THREE.Mesh(
-  new THREE.BoxGeometry(22,3.5,0.3),
-  new THREE.MeshLambertMaterial({ color:0xffaa00 })
-);
-signMesh.position.set(-210, 10.5, -11.2);
-scene.add(signMesh);
+// Garage
+const GARAGE_POS = new THREE.Vector3(-210,0,0);
+building(-210,0,32,8,22);
+const signMesh = new THREE.Mesh(new THREE.BoxGeometry(22,3.5,0.3),new THREE.MeshLambertMaterial({color:0xffaa00}));
+signMesh.position.set(-210,10.5,-11.2); scene.add(signMesh);
 
-// ─────────────────────────────────────────
-// TREES
-// ─────────────────────────────────────────
-function tree(x, z) {
-  const h = 3 + Math.random()*2.5;
-  const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.18,0.28,h,6),
-    new THREE.MeshLambertMaterial({ color:0x5c3a1a }));
-  trunk.position.set(x, h/2, z); trunk.castShadow = true; scene.add(trunk);
-  const top = new THREE.Mesh(new THREE.SphereGeometry(1.8+Math.random()*0.8,6,5),
-    new THREE.MeshLambertMaterial({ color: new THREE.Color(
-      0.08+Math.random()*0.18, 0.33+Math.random()*0.18, 0.08) }));
-  top.position.set(x, h+1.4, z); top.castShadow = true; scene.add(top);
+// Trees
+function tree(x,z) {
+  const h=3+Math.random()*2.5;
+  const trunk=new THREE.Mesh(new THREE.CylinderGeometry(0.18,0.28,h,6),new THREE.MeshLambertMaterial({color:0x5c3a1a}));
+  trunk.position.set(x,h/2,z); trunk.castShadow=true; scene.add(trunk);
+  const top=new THREE.Mesh(new THREE.SphereGeometry(1.8+Math.random()*0.8,6,5),
+    new THREE.MeshLambertMaterial({color:new THREE.Color(0.08+Math.random()*0.18,0.33+Math.random()*0.18,0.08)}));
+  top.position.set(x,h+1.4,z); top.castShadow=true; scene.add(top);
 }
-for (let i = 0; i < 140; i++) {
-  const a = Math.random()*Math.PI*2, r = 25+Math.random()*750;
-  tree(Math.cos(a)*r, Math.sin(a)*r);
-}
+for (let i=0;i<140;i++){const a=Math.random()*Math.PI*2,r=25+Math.random()*750;tree(Math.cos(a)*r,Math.sin(a)*r);}
 
-// ─────────────────────────────────────────
-// VEHICLES
-// ─────────────────────────────────────────
+// ─── VEHICLES ────────────────────────────────────────────────
 const VEHICLES = {
-  pickup:      { name:'Pickup Truck',       maxSpeed:28, accel:18, handling:2.2, canIntercept:false, color:0xcc3322 },
-  interceptor: { name:'Basic Interceptor',  maxSpeed:22, accel:14, handling:1.8, canIntercept:true,  color:0x334488 },
+  pickup:      { name:'Pickup Truck',       maxSpeed:28, accel:18, handling:2.2, canIntercept:false, color:0xcc3322, price:0,     unlocked:true,  armour:1 },
+  interceptor: { name:'Basic Interceptor',  maxSpeed:22, accel:14, handling:1.8, canIntercept:true,  color:0x334488, price:0,     unlocked:true,  armour:3 },
+  ram:         { name:'Dodge Ram',          maxSpeed:40, accel:24, handling:2.6, canIntercept:false, color:0x222222, price:3000,  unlocked:false, armour:2 },
+  suv:         { name:'Armoured SUV',       maxSpeed:32, accel:16, handling:2.0, canIntercept:true,  color:0x3a4a30, price:5000,  unlocked:false, armour:4 },
+  tiv2:        { name:'TIV-2',             maxSpeed:26, accel:15, handling:1.6, canIntercept:true,  color:0x2a3a4a, price:10000, unlocked:false, armour:5 },
+  dominator:   { name:'Dominator',          maxSpeed:20, accel:12, handling:1.4, canIntercept:true,  color:0x4a2a1a, price:20000, unlocked:false, armour:6 },
 };
 
 function mkPickup(color) {
-  const g = new THREE.Group();
-  const mat   = new THREE.MeshLambertMaterial({ color });
-  const dark  = new THREE.MeshLambertMaterial({ color:0x111111 });
-  const glass = new THREE.MeshLambertMaterial({ color:0x334466, transparent:true, opacity:0.7 });
-  const body  = new THREE.Mesh(new THREE.BoxGeometry(2,0.8,4.5), mat);
-  body.position.y = 0.7; body.castShadow = true; g.add(body);
-  const cab = new THREE.Mesh(new THREE.BoxGeometry(1.9,0.9,2.2), mat);
-  cab.position.set(0,1.55,0.4); cab.castShadow = true; g.add(cab);
-  const wind = new THREE.Mesh(new THREE.BoxGeometry(1.8,0.68,0.1), glass);
-  wind.position.set(0,1.6,-0.72); g.add(wind);
-  const wGeo = new THREE.CylinderGeometry(0.44,0.44,0.34,10);
+  const g=new THREE.Group();
+  const mat=new THREE.MeshLambertMaterial({color}), dark=new THREE.MeshLambertMaterial({color:0x111111}),
+        glass=new THREE.MeshLambertMaterial({color:0x334466,transparent:true,opacity:0.7});
+  const body=new THREE.Mesh(new THREE.BoxGeometry(2,0.8,4.5),mat); body.position.y=0.7; body.castShadow=true; g.add(body);
+  const cab=new THREE.Mesh(new THREE.BoxGeometry(1.9,0.9,2.2),mat); cab.position.set(0,1.55,0.4); cab.castShadow=true; g.add(cab);
+  const wind=new THREE.Mesh(new THREE.BoxGeometry(1.8,0.68,0.1),glass); wind.position.set(0,1.6,-0.72); g.add(wind);
+  const wGeo=new THREE.CylinderGeometry(0.44,0.44,0.34,10);
   [[1.14,0.44,1.4],[-1.14,0.44,1.4],[1.14,0.44,-1.4],[-1.14,0.44,-1.4]].forEach(([x,y,z])=>{
-    const w = new THREE.Mesh(wGeo, dark); w.rotation.z = Math.PI/2;
-    w.position.set(x,y,z); g.add(w);
-  });
+    const w=new THREE.Mesh(wGeo,dark); w.rotation.z=Math.PI/2; w.position.set(x,y,z); g.add(w);});
   return g;
 }
 
 function mkInterceptor(color) {
-  const g = new THREE.Group();
-  const mat   = new THREE.MeshLambertMaterial({ color });
-  const dark  = new THREE.MeshLambertMaterial({ color:0x111111 });
-  const steel = new THREE.MeshLambertMaterial({ color:0x777788 });
-  const body  = new THREE.Mesh(new THREE.BoxGeometry(2.5,1.0,5.2), mat);
-  body.position.y = 0.82; body.castShadow = true; g.add(body);
-  [1.32,-1.32].forEach(x => {
-    const p = new THREE.Mesh(new THREE.BoxGeometry(0.15,0.8,4.8), steel);
-    p.position.set(x,0.92,0); g.add(p);
-  });
-  const roof = new THREE.Mesh(new THREE.BoxGeometry(2.3,0.5,2.6), mat);
-  roof.position.set(0,1.57,0.3); roof.castShadow = true; g.add(roof);
-  const bar = new THREE.Mesh(new THREE.BoxGeometry(2.5,0.2,0.2), steel);
-  bar.position.set(0,0.92,-2.7); g.add(bar);
-  const mast = new THREE.Mesh(new THREE.CylinderGeometry(0.05,0.05,1.6,6), steel);
-  mast.position.set(0,2.1,0.3); g.add(mast);
-  const sensor = new THREE.Mesh(new THREE.SphereGeometry(0.15,6,5),
-    new THREE.MeshLambertMaterial({ color:0xffff00 }));
+  const g=new THREE.Group();
+  const mat=new THREE.MeshLambertMaterial({color}), dark=new THREE.MeshLambertMaterial({color:0x111111}),
+        steel=new THREE.MeshLambertMaterial({color:0x777788});
+  const body=new THREE.Mesh(new THREE.BoxGeometry(2.5,1.0,5.2),mat); body.position.y=0.82; body.castShadow=true; g.add(body);
+  [1.32,-1.32].forEach(x=>{const p=new THREE.Mesh(new THREE.BoxGeometry(0.15,0.8,4.8),steel); p.position.set(x,0.92,0); g.add(p);});
+  const roof=new THREE.Mesh(new THREE.BoxGeometry(2.3,0.5,2.6),mat); roof.position.set(0,1.57,0.3); roof.castShadow=true; g.add(roof);
+  const bar=new THREE.Mesh(new THREE.BoxGeometry(2.5,0.2,0.2),steel); bar.position.set(0,0.92,-2.7); g.add(bar);
+  const mast=new THREE.Mesh(new THREE.CylinderGeometry(0.05,0.05,1.6,6),steel); mast.position.set(0,2.1,0.3); g.add(mast);
+  const sensor=new THREE.Mesh(new THREE.SphereGeometry(0.15,6,5),new THREE.MeshLambertMaterial({color:0xffff00}));
   sensor.position.set(0,2.9,0.3); g.add(sensor);
-  const wGeo = new THREE.CylinderGeometry(0.54,0.54,0.38,10);
+  const wGeo=new THREE.CylinderGeometry(0.54,0.54,0.38,10);
   [[1.3,0.54,1.65],[-1.3,0.54,1.65],[1.3,0.54,-1.65],[-1.3,0.54,-1.65]].forEach(([x,y,z])=>{
-    const w = new THREE.Mesh(wGeo, dark); w.rotation.z = Math.PI/2;
-    w.position.set(x,y,z); g.add(w);
-  });
+    const w=new THREE.Mesh(wGeo,dark); w.rotation.z=Math.PI/2; w.position.set(x,y,z); g.add(w);});
   return g;
 }
 
-const vMeshes = {
-  pickup:      mkPickup(VEHICLES.pickup.color),
-  interceptor: mkInterceptor(VEHICLES.interceptor.color),
-};
-scene.add(vMeshes.pickup);
-scene.add(vMeshes.interceptor);
+function mkRam(color) {
+  const g=new THREE.Group();
+  const mat=new THREE.MeshLambertMaterial({color}), dark=new THREE.MeshLambertMaterial({color:0x111111}),
+        chrome=new THREE.MeshLambertMaterial({color:0xaaaaaa});
+  const body=new THREE.Mesh(new THREE.BoxGeometry(2.2,0.9,5.0),mat); body.position.y=0.85; body.castShadow=true; g.add(body);
+  const cab=new THREE.Mesh(new THREE.BoxGeometry(2.1,1.0,2.4),mat); cab.position.set(0,1.85,0.3); cab.castShadow=true; g.add(cab);
+  // Roll bar
+  const rb=new THREE.Mesh(new THREE.CylinderGeometry(0.06,0.06,1.1,6),chrome); rb.position.set(0,2.4,0.3); g.add(rb);
+  const rbh=new THREE.Mesh(new THREE.BoxGeometry(1.8,0.08,0.08),chrome); rbh.position.set(0,2.96,0.3); g.add(rbh);
+  // Bull bar
+  const bb=new THREE.Mesh(new THREE.BoxGeometry(2.3,0.25,0.15),chrome); bb.position.set(0,0.85,-2.6); g.add(bb);
+  const wGeo=new THREE.CylinderGeometry(0.52,0.52,0.36,10);
+  [[1.2,0.52,1.6],[-1.2,0.52,1.6],[1.2,0.52,-1.6],[-1.2,0.52,-1.6]].forEach(([x,y,z])=>{
+    const w=new THREE.Mesh(wGeo,dark); w.rotation.z=Math.PI/2; w.position.set(x,y,z); g.add(w);});
+  return g;
+}
 
-// ─────────────────────────────────────────
-// PLAYER
-// ─────────────────────────────────────────
+function mkSUV(color) {
+  const g=new THREE.Group();
+  const mat=new THREE.MeshLambertMaterial({color}), dark=new THREE.MeshLambertMaterial({color:0x111111}),
+        steel=new THREE.MeshLambertMaterial({color:0x667766});
+  const body=new THREE.Mesh(new THREE.BoxGeometry(2.6,1.3,4.8),mat); body.position.y=1.0; body.castShadow=true; g.add(body);
+  // Armour skirt all around
+  [[-1.4,0.65,0,0.15,0.9,4.6],[1.4,0.65,0,0.15,0.9,4.6],[0,0.65,2.5,2.6,0.9,0.15],[0,0.65,-2.5,2.6,0.9,0.15]].forEach(([x,y,z,w,h,d])=>{
+    const p=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),steel); p.position.set(x,y,z); g.add(p);});
+  const roof=new THREE.Mesh(new THREE.BoxGeometry(2.4,0.4,4.4),mat); roof.position.set(0,1.85,0); g.add(roof);
+  const bb=new THREE.Mesh(new THREE.BoxGeometry(2.8,0.2,0.2),steel); bb.position.set(0,1.0,-2.6); g.add(bb);
+  const wGeo=new THREE.CylinderGeometry(0.56,0.56,0.4,10);
+  [[1.4,0.56,1.7],[-1.4,0.56,1.7],[1.4,0.56,-1.7],[-1.4,0.56,-1.7]].forEach(([x,y,z])=>{
+    const w=new THREE.Mesh(wGeo,dark); w.rotation.z=Math.PI/2; w.position.set(x,y,z); g.add(w);});
+  return g;
+}
+
+function mkTIV2(color) {
+  const g=new THREE.Group();
+  const mat=new THREE.MeshLambertMaterial({color}), dark=new THREE.MeshLambertMaterial({color:0x111111}),
+        steel=new THREE.MeshLambertMaterial({color:0x556677}), orange=new THREE.MeshLambertMaterial({color:0xff6600});
+  // Very low wide body
+  const body=new THREE.Mesh(new THREE.BoxGeometry(3.2,0.8,5.5),mat); body.position.y=0.65; body.castShadow=true; g.add(body);
+  // Hydraulic skirt panels all sides (lower)
+  [[-1.7,0.3,0,0.15,0.5,5.2],[1.7,0.3,0,0.15,0.5,5.2],[0,0.3,2.75,3.2,0.5,0.15],[0,0.3,-2.75,3.2,0.5,0.15]].forEach(([x,y,z,w,h,d])=>{
+    const p=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),steel); p.position.set(x,y,z); g.add(p);});
+  // Low cab
+  const cab=new THREE.Mesh(new THREE.BoxGeometry(3.0,0.5,2.8),mat); cab.position.set(0,1.3,0.3); g.add(cab);
+  // Turbine on top (cone pointing up)
+  const turb=new THREE.Mesh(new THREE.CylinderGeometry(0.15,0.6,1.2,10),orange); turb.position.set(0,1.85,0.3); g.add(turb);
+  // Camera arms
+  [[-1.2,1.2,0],[1.2,1.2,0]].forEach(([x,y,z])=>{
+    const m=new THREE.Mesh(new THREE.CylinderGeometry(0.04,0.04,0.8,5),steel); m.position.set(x,y,z); g.add(m);
+    const s=new THREE.Mesh(new THREE.SphereGeometry(0.1,5,4),new THREE.MeshLambertMaterial({color:0xffff00})); s.position.set(x,y+0.5,z); g.add(s);});
+  const wGeo=new THREE.CylinderGeometry(0.6,0.6,0.42,10);
+  [[1.65,0.6,1.8],[-1.65,0.6,1.8],[1.65,0.6,-1.8],[-1.65,0.6,-1.8]].forEach(([x,y,z])=>{
+    const w=new THREE.Mesh(wGeo,dark); w.rotation.z=Math.PI/2; w.position.set(x,y,z); g.add(w);});
+  return g;
+}
+
+function mkDominator(color) {
+  const g=new THREE.Group();
+  const mat=new THREE.MeshLambertMaterial({color}), dark=new THREE.MeshLambertMaterial({color:0x111111}),
+        steel=new THREE.MeshLambertMaterial({color:0x886644}), yel=new THREE.MeshLambertMaterial({color:0xffcc00});
+  // Massive armoured hull
+  const body=new THREE.Mesh(new THREE.BoxGeometry(3.6,1.2,6.0),mat); body.position.y=0.85; body.castShadow=true; g.add(body);
+  // Heavy armour panels
+  [[-2.0,0.85,0,0.2,1.1,5.8],[2.0,0.85,0,0.2,1.1,5.8],[0,0.85,3.1,3.6,1.1,0.2],[0,0.85,-3.1,3.6,1.1,0.2]].forEach(([x,y,z,w,h,d])=>{
+    const p=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),steel); p.position.set(x,y,z); g.add(p);});
+  // Flat armoured top
+  const top=new THREE.Mesh(new THREE.BoxGeometry(3.4,0.35,5.6),mat); top.position.set(0,1.6,0); g.add(top);
+  // Three camera masts
+  [[0,2.1,0.5],[-1.0,2.0,-0.3],[1.0,2.0,-0.3]].forEach(([x,y,z])=>{
+    const m=new THREE.Mesh(new THREE.CylinderGeometry(0.05,0.05,1.2,6),steel); m.position.set(x,y,z); g.add(m);
+    const s=new THREE.Mesh(new THREE.SphereGeometry(0.12,5,4),yel); s.position.set(x,y+0.7,z); g.add(s);});
+  // Huge bull bar
+  const bb=new THREE.Mesh(new THREE.BoxGeometry(3.8,0.35,0.2),steel); bb.position.set(0,0.85,-3.2); g.add(bb);
+  const wGeo=new THREE.CylinderGeometry(0.65,0.65,0.44,10);
+  [[1.85,0.65,1.9],[-1.85,0.65,1.9],[1.85,0.65,-1.9],[-1.85,0.65,-1.9]].forEach(([x,y,z])=>{
+    const w=new THREE.Mesh(wGeo,dark); w.rotation.z=Math.PI/2; w.position.set(x,y,z); g.add(w);});
+  return g;
+}
+
+const vMeshes = {};
+Object.keys(VEHICLES).forEach(k=>{
+  const v=VEHICLES[k];
+  let mesh;
+  if (k==='pickup')      mesh=mkPickup(v.color);
+  else if (k==='interceptor') mesh=mkInterceptor(v.color);
+  else if (k==='ram')    mesh=mkRam(v.color);
+  else if (k==='suv')    mesh=mkSUV(v.color);
+  else if (k==='tiv2')   mesh=mkTIV2(v.color);
+  else                   mesh=mkDominator(v.color);
+  scene.add(mesh); vMeshes[k]=mesh;
+});
+
+// ─── PLAYER ──────────────────────────────────────────────────
 let curVehicle = 'pickup';
-const player = { pos: new THREE.Vector3(-195,0,-8), angle:0, speed:0, money:5000 };
+const player = { pos:new THREE.Vector3(-195,0,-8), angle:0, speed:0, money:5000 };
+
+function parkAllVehicles() {
+  const ks = Object.keys(VEHICLES);
+  ks.forEach((k,i) => {
+    if (k===curVehicle) return;
+    const col = i%3, row = Math.floor(i/3);
+    vMeshes[k].position.set(GARAGE_POS.x-8+col*8, 0, GARAGE_POS.z-12+row*8);
+    vMeshes[k].rotation.y = 0;
+  });
+}
 vMeshes.pickup.position.set(-195,0,-8);
-vMeshes.interceptor.position.set(-195,0,8);
+parkAllVehicles();
 
-// ─────────────────────────────────────────
-// PROBE
-// ─────────────────────────────────────────
-const probeMesh = new THREE.Mesh(
-  new THREE.CylinderGeometry(0.3,0.6,1.5,8),
-  new THREE.MeshLambertMaterial({ color:0xff6600, emissive:0x331100 })
-);
-probeMesh.visible = false; scene.add(probeMesh);
+// ─── PROBE ───────────────────────────────────────────────────
+const probeMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.3,0.6,1.5,8),
+  new THREE.MeshLambertMaterial({color:0xff6600,emissive:0x331100}));
+probeMesh.visible=false; scene.add(probeMesh);
+const probeRingMat=new THREE.MeshBasicMaterial({color:0xff6600,side:THREE.DoubleSide,transparent:true,opacity:0.7});
+const probeRing=new THREE.Mesh(new THREE.RingGeometry(1,1.6,18),probeRingMat);
+probeRing.rotation.x=-Math.PI/2; probeRing.position.y=0.05; probeRing.visible=false; scene.add(probeRing);
+const probe={deployed:false,pos:new THREE.Vector3(),scored:false};
 
-const probeRingMat = new THREE.MeshBasicMaterial({ color:0xff6600, side:THREE.DoubleSide, transparent:true, opacity:0.7 });
-const probeRing = new THREE.Mesh(new THREE.RingGeometry(1,1.6,18), probeRingMat);
-probeRing.rotation.x = -Math.PI/2; probeRing.position.y = 0.05;
-probeRing.visible = false; scene.add(probeRing);
-
-const probe = { deployed:false, pos:new THREE.Vector3(), scored:false };
-
-// ─────────────────────────────────────────
-// STORM CLOUDS
-// ─────────────────────────────────────────
-const cloudGroup = new THREE.Group();
-scene.add(cloudGroup);
-let cloudMeshes = [];
-
-function buildClouds(cx, cz) {
-  cloudMeshes.forEach(m => cloudGroup.remove(m));
-  cloudMeshes = [];
-  for (let i = 0; i < 22; i++) {
-    const r = 14 + Math.random()*22;
-    const m = new THREE.Mesh(new THREE.SphereGeometry(r,7,5),
-      new THREE.MeshLambertMaterial({ color:0x303545, transparent:true, opacity:0 }));
-    m.position.set(cx+(Math.random()-0.5)*220, 110+Math.random()*45, cz+(Math.random()-0.5)*220);
+// ─── STORM CLOUDS ────────────────────────────────────────────
+const cloudGroup=new THREE.Group(); scene.add(cloudGroup);
+let cloudMeshes=[];
+function buildClouds(cx,cz) {
+  cloudMeshes.forEach(m=>cloudGroup.remove(m)); cloudMeshes=[];
+  for (let i=0;i<22;i++){
+    const r=14+Math.random()*22;
+    const m=new THREE.Mesh(new THREE.SphereGeometry(r,7,5),
+      new THREE.MeshLambertMaterial({color:0x303545,transparent:true,opacity:0}));
+    m.position.set(cx+(Math.random()-0.5)*220,110+Math.random()*45,cz+(Math.random()-0.5)*220);
     cloudGroup.add(m); cloudMeshes.push(m);
   }
 }
 
-// ─────────────────────────────────────────
-// TORNADO
-// ─────────────────────────────────────────
-const tornadoGroup = new THREE.Group();
-tornadoGroup.visible = false;
-scene.add(tornadoGroup);
-
-// Funnel cone — narrow at ground, wide at cloud base
-// Use LatheGeometry to get the classic curved funnel profile
-const funnelPoints = [];
-for (let i = 0; i <= 20; i++) {
-  const t = i / 20;
-  // Classic tornado shape: very narrow near ground, curves outward toward top
-  const r = 0.4 + Math.pow(t, 1.6) * 16;
-  funnelPoints.push(new THREE.Vector2(r, t * 75));
-}
-const funnelGeo = new THREE.LatheGeometry(funnelPoints, 24);
-const funnelMat = new THREE.MeshLambertMaterial({
-  color: 0x4a4a5a, transparent: true, opacity: 0.55, side: THREE.DoubleSide,
-});
-const funnelMesh = new THREE.Mesh(funnelGeo, funnelMat);
-tornadoGroup.add(funnelMesh);
-
-// Inner darker core for depth
-const corePoints = [];
-for (let i = 0; i <= 20; i++) {
-  const t = i / 20;
-  const r = 0.1 + Math.pow(t, 1.8) * 8;
-  corePoints.push(new THREE.Vector2(r, t * 75));
-}
-const coreMesh = new THREE.Mesh(
-  new THREE.LatheGeometry(corePoints, 18),
-  new THREE.MeshLambertMaterial({ color: 0x222230, transparent: true, opacity: 0.7, side: THREE.DoubleSide })
-);
-tornadoGroup.add(coreMesh);
-
-// Spinning texture rings — fewer, just for rotation effect
-const tornadoRings = [];
-for (let i = 0; i < 14; i++) {
-  const t = i / 13;
-  const r = 0.4 + Math.pow(t, 1.6) * 16;
-  const geo = new THREE.TorusGeometry(r, 0.3, 5, 22);
-  const mat = new THREE.MeshLambertMaterial({
-    color: new THREE.Color(0.28+t*0.1, 0.28+t*0.1, 0.35+t*0.08),
-    transparent: true, opacity: 0.35 - t*0.2,
-  });
-  const ring = new THREE.Mesh(geo, mat);
-  ring.position.y = t * 75;
-  tornadoGroup.add(ring);
-  tornadoRings.push({ mesh: ring, spin: 5 - t * 3.5 });
-}
-
-const NDEBRIS = 320;
-const dBuf = new Float32Array(NDEBRIS*3);
-const dData = [];
-for (let i = 0; i < NDEBRIS; i++) {
-  const a = Math.random()*Math.PI*2, h = Math.random()*64, t = h/64;
-  const r = (0.5+t*15)*(0.75+Math.random()*0.5);
-  dBuf[i*3]=Math.cos(a)*r; dBuf[i*3+1]=h; dBuf[i*3+2]=Math.sin(a)*r;
-  dData.push({ a, h, baseR:0.5+t*15, speed:1.5+Math.random()*3 });
-}
-const dGeo = new THREE.BufferGeometry();
-dGeo.setAttribute('position', new THREE.BufferAttribute(dBuf,3));
-tornadoGroup.add(new THREE.Points(dGeo, new THREE.PointsMaterial({ color:0x7a5a2a, size:0.7 })));
-
-const tAI = {
-  pos: new THREE.Vector3(400,0,-300),
-  heading: Math.PI*0.2+(Math.random()-0.5)*0.6,
-  speed: 4, scale: 0, changeT: 0,
+// ─── TORNADO TYPES ───────────────────────────────────────────
+const TORNADO_TYPES = {
+  rope: {
+    name:'Rope Tornado', speed:6, dangerRadius:8, probeRadius:14,
+    payoutBase:400, payoutBonus:800, interceptPay:80,
+    changeInterval:[1,2.5],
+    build(g) {
+      const pts=[];
+      for(let i=0;i<=22;i++){const t=i/22;pts.push(new THREE.Vector2(0.12+Math.pow(t,2.4)*3.5,t*95));}
+      g.add(new THREE.Mesh(new THREE.LatheGeometry(pts,18),new THREE.MeshLambertMaterial({color:0x3a3040,transparent:true,opacity:0.65,side:THREE.DoubleSide})));
+      const cpts=[];
+      for(let i=0;i<=22;i++){const t=i/22;cpts.push(new THREE.Vector2(0.05+Math.pow(t,2.8)*1.5,t*95));}
+      g.add(new THREE.Mesh(new THREE.LatheGeometry(cpts,12),new THREE.MeshLambertMaterial({color:0x1a1020,transparent:true,opacity:0.8,side:THREE.DoubleSide})));
+      const rings=[];
+      for(let i=0;i<8;i++){const t=i/7;const r=0.12+Math.pow(t,2.4)*3.5;
+        const ring=new THREE.Mesh(new THREE.TorusGeometry(r,0.15,5,16),new THREE.MeshLambertMaterial({color:0x44304a,transparent:true,opacity:0.3-t*0.15}));
+        ring.position.y=t*95; g.add(ring); rings.push({mesh:ring,spin:6-t*4});}
+      return {rings,debris:{count:100,maxH:80,maxR:4}};
+    }
+  },
+  cone: {
+    name:'Cone Tornado', speed:4, dangerRadius:14, probeRadius:22,
+    payoutBase:500, payoutBonus:1500, interceptPay:160,
+    changeInterval:[3,6],
+    build(g) {
+      const pts=[];
+      for(let i=0;i<=20;i++){const t=i/20;pts.push(new THREE.Vector2(0.4+Math.pow(t,1.6)*16,t*75));}
+      g.add(new THREE.Mesh(new THREE.LatheGeometry(pts,24),new THREE.MeshLambertMaterial({color:0x4a4a5a,transparent:true,opacity:0.55,side:THREE.DoubleSide})));
+      const cpts=[];
+      for(let i=0;i<=20;i++){const t=i/20;cpts.push(new THREE.Vector2(0.1+Math.pow(t,1.8)*8,t*75));}
+      g.add(new THREE.Mesh(new THREE.LatheGeometry(cpts,18),new THREE.MeshLambertMaterial({color:0x222230,transparent:true,opacity:0.7,side:THREE.DoubleSide})));
+      const rings=[];
+      for(let i=0;i<14;i++){const t=i/13;const r=0.4+Math.pow(t,1.6)*16;
+        const ring=new THREE.Mesh(new THREE.TorusGeometry(r,0.3,5,22),new THREE.MeshLambertMaterial({color:new THREE.Color(0.28+t*0.1,0.28+t*0.1,0.35+t*0.08),transparent:true,opacity:0.35-t*0.2}));
+        ring.position.y=t*75; g.add(ring); rings.push({mesh:ring,spin:5-t*3.5});}
+      return {rings,debris:{count:320,maxH:64,maxR:15}};
+    }
+  },
+  wedge: {
+    name:'Wedge Tornado', speed:2, dangerRadius:30, probeRadius:42,
+    payoutBase:1200, payoutBonus:3000, interceptPay:350,
+    changeInterval:[5,10],
+    build(g) {
+      const pts=[];
+      for(let i=0;i<=20;i++){const t=i/20;pts.push(new THREE.Vector2(10+Math.pow(t,0.5)*20,t*55));}
+      g.add(new THREE.Mesh(new THREE.LatheGeometry(pts,28),new THREE.MeshLambertMaterial({color:0x3a3a4a,transparent:true,opacity:0.6,side:THREE.DoubleSide})));
+      const cpts=[];
+      for(let i=0;i<=20;i++){const t=i/20;cpts.push(new THREE.Vector2(6+Math.pow(t,0.6)*12,t*55));}
+      g.add(new THREE.Mesh(new THREE.LatheGeometry(cpts,20),new THREE.MeshLambertMaterial({color:0x1a1a28,transparent:true,opacity:0.75,side:THREE.DoubleSide})));
+      const rings=[];
+      for(let i=0;i<18;i++){const t=i/17;const r=10+Math.pow(t,0.5)*20;
+        const ring=new THREE.Mesh(new THREE.TorusGeometry(r,0.5,5,28),new THREE.MeshLambertMaterial({color:new THREE.Color(0.22+t*0.08,0.22+t*0.08,0.3+t*0.06),transparent:true,opacity:0.38-t*0.22}));
+        ring.position.y=t*55; g.add(ring); rings.push({mesh:ring,spin:3-t*2});}
+      return {rings,debris:{count:500,maxH:50,maxR:28}};
+    }
+  },
+  multivortex: {
+    name:'Multi-Vortex', speed:5, dangerRadius:20, probeRadius:30,
+    payoutBase:800, payoutBonus:2000, interceptPay:220,
+    changeInterval:[2,4],
+    build(g) {
+      // 3 sub-vortices orbit a centre — stored as sub-groups
+      const rings=[], subGroups=[];
+      for(let s=0;s<3;s++){
+        const sg=new THREE.Group();
+        const pts=[];
+        for(let i=0;i<=16;i++){const t=i/16;pts.push(new THREE.Vector2(0.2+Math.pow(t,2.0)*5,t*60));}
+        sg.add(new THREE.Mesh(new THREE.LatheGeometry(pts,14),new THREE.MeshLambertMaterial({color:0x404050,transparent:true,opacity:0.6,side:THREE.DoubleSide})));
+        for(let i=0;i<6;i++){const t=i/5;const r=0.2+Math.pow(t,2)*5;
+          const ring=new THREE.Mesh(new THREE.TorusGeometry(r,0.2,5,14),new THREE.MeshLambertMaterial({color:0x4a4a5a,transparent:true,opacity:0.3-t*0.15}));
+          ring.position.y=t*60; sg.add(ring); rings.push({mesh:ring,spin:6-t*4});}
+        g.add(sg); subGroups.push(sg);
+      }
+      return {rings,subGroups,debris:{count:240,maxH:55,maxR:18}};
+    }
+  },
 };
 
-// ─────────────────────────────────────────
-// STORM STATE
-// ─────────────────────────────────────────
-const storm = { phase:'clear', buildTimer:0, buildDuration:40, willProduce:false, active:false };
-let nextStormIn = 12 + Math.random()*20;
+const EF_SCALE = [
+  {label:'EF0',sizeMult:0.55,payoutMult:0.5,interceptPay:80},
+  {label:'EF1',sizeMult:0.75,payoutMult:0.8,interceptPay:110},
+  {label:'EF2',sizeMult:1.0, payoutMult:1.0,interceptPay:160},
+  {label:'EF3',sizeMult:1.3, payoutMult:1.6,interceptPay:260},
+  {label:'EF4',sizeMult:1.65,payoutMult:2.8,interceptPay:420},
+  {label:'EF5',sizeMult:2.1, payoutMult:5.0,interceptPay:700},
+];
+function pickEF() {
+  const w=[0.28,0.26,0.22,0.13,0.07,0.04], r=Math.random(); let acc=0;
+  for(let i=0;i<6;i++){acc+=w[i];if(r<acc)return i;} return 5;
+}
+
+// Tornado group — rebuilt on each spawn
+const tornadoGroup=new THREE.Group(); tornadoGroup.visible=false; scene.add(tornadoGroup);
+let tornadoRings=[], tornadoSubGroups=[], tornadoDebrisData=[];
+let tornadoDebrisBuf=null, tornadoDebrisGeo=null;
+let activeTornadoType=null, activeEF=null;
+
+function buildTornadoMesh(typeName, efIdx) {
+  // Clear old
+  while(tornadoGroup.children.length) tornadoGroup.remove(tornadoGroup.children[0]);
+  tornadoRings=[]; tornadoSubGroups=[]; tornadoDebrisData=[];
+
+  const type = TORNADO_TYPES[typeName];
+  const result = type.build(tornadoGroup);
+  tornadoRings = result.rings;
+  if (result.subGroups) tornadoSubGroups = result.subGroups;
+
+  // Debris
+  const dc=result.debris.count, maxH=result.debris.maxH, maxR=result.debris.maxR;
+  tornadoDebrisBuf = new Float32Array(dc*3);
+  for(let i=0;i<dc;i++){
+    const a=Math.random()*Math.PI*2, h=Math.random()*maxH, t=h/maxH;
+    const r=(0.2+t*maxR)*(0.7+Math.random()*0.6);
+    tornadoDebrisBuf[i*3]=Math.cos(a)*r; tornadoDebrisBuf[i*3+1]=h; tornadoDebrisBuf[i*3+2]=Math.sin(a)*r;
+    tornadoDebrisData.push({a,h,baseR:0.2+t*maxR,speed:1.2+Math.random()*3.5,maxH});
+  }
+  tornadoDebrisGeo=new THREE.BufferGeometry();
+  tornadoDebrisGeo.setAttribute('position',new THREE.BufferAttribute(tornadoDebrisBuf,3));
+  tornadoGroup.add(new THREE.Points(tornadoDebrisGeo,new THREE.PointsMaterial({color:0x7a5a2a,size:0.7})));
+}
+
+// ─── STORM STATE ─────────────────────────────────────────────
+const storm={phase:'clear',buildTimer:0,buildDuration:40,willProduce:false,active:false};
+let nextStormIn=12+Math.random()*20;
+
+const tAI={pos:new THREE.Vector3(400,0,-300),heading:Math.PI*0.2+(Math.random()-0.5)*0.6,
+           speed:4,scale:0,changeT:0,type:'cone',ef:2};
 
 function startStorm() {
-  storm.phase = 'building'; storm.buildTimer = 0;
-  storm.willProduce = Math.random() < 0.6;
-  const cx = (Math.random()-0.5)*800, cz = (Math.random()-0.5)*800;
-  buildClouds(cx, cz);
-  tAI.pos.set(cx, 0, cz);
+  storm.phase='building'; storm.buildTimer=0; storm.willProduce=Math.random()<0.6;
+  const cx=(Math.random()-0.5)*800, cz=(Math.random()-0.5)*800;
+  buildClouds(cx,cz); tAI.pos.set(cx,0,cz);
 }
 
 function spawnTornado() {
-  tAI.scale = 0;
-  tAI.heading = Math.PI*0.2+(Math.random()-0.5)*0.8;
-  tornadoGroup.visible = true;
-  storm.active = true;
+  const types=Object.keys(TORNADO_TYPES);
+  tAI.type=types[Math.floor(Math.random()*types.length)];
+  tAI.ef=pickEF();
+  const type=TORNADO_TYPES[tAI.type], ef=EF_SCALE[tAI.ef];
+  tAI.speed=type.speed;
+  tAI.scale=0; tAI.heading=Math.PI*0.2+(Math.random()-0.5)*0.8;
+  buildTornadoMesh(tAI.type, tAI.ef);
+  tornadoGroup.visible=true; storm.active=true;
 }
 
 function dissipate() {
-  storm.active = false; tornadoGroup.visible = false;
-  probe.deployed = false; probeMesh.visible = false; probeRing.visible = false;
-  document.getElementById('probe-status').textContent = 'READY';
-  document.getElementById('probe-status').style.color = '';
-  storm.phase = 'dissipating';
-  setStormStatus('TORNADO DISSIPATED','#88aaff');
+  storm.active=false; tornadoGroup.visible=false;
+  probe.deployed=false; probeMesh.visible=false; probeRing.visible=false;
+  document.getElementById('probe-status').textContent='READY';
+  document.getElementById('probe-status').style.color='';
+  document.getElementById('tornado-type-label').textContent='';
+  storm.phase='dissipating'; setStormStatus('TORNADO DISSIPATED','#88aaff');
+}
+function setStormStatus(t,c){document.getElementById('storm-status').textContent=t;document.getElementById('storm-status').style.color=c;}
+
+// ─── GARAGE SHOP ─────────────────────────────────────────────
+let shopOpen=false;
+
+function openShop() {
+  shopOpen=true;
+  document.getElementById('garage-shop').classList.add('open');
+  renderShop();
+}
+function closeShop() {
+  shopOpen=false;
+  document.getElementById('garage-shop').classList.remove('open');
+}
+document.getElementById('shop-close-btn').addEventListener('click',closeShop);
+
+function renderShop() {
+  document.getElementById('shop-money-val').textContent=player.money;
+  const grid=document.getElementById('vehicle-grid');
+  grid.innerHTML='';
+  Object.entries(VEHICLES).forEach(([k,v])=>{
+    const isActive=k===curVehicle, isOwned=v.unlocked, canBuy=!isOwned&&player.money>=v.price;
+    const card=document.createElement('div');
+    card.className='vcard'+(isActive?' active-card':isOwned?'':' locked-card');
+
+    const spd=Math.round(v.maxSpeed/40*100), acc=Math.round(v.accel/24*100),
+          han=Math.round(v.handling/2.6*100), arm=Math.round(v.armour/6*100);
+
+    card.innerHTML=`
+      <div class="vcard-name">${v.name}</div>
+      <div class="vcard-badges">
+        ${isActive?'<span class="badge badge-active">ACTIVE</span>':''}
+        ${isOwned&&!isActive?'<span class="badge badge-owned">OWNED</span>':''}
+        ${v.canIntercept?'<span class="badge badge-intercept">INTERCEPT</span>':''}
+      </div>
+      <div class="vcard-stats">
+        <div class="stat-row"><span class="stat-label">Speed</span><div class="stat-bar-bg"><div class="stat-bar" style="width:${spd}%;background:#4eff4e"></div></div></div>
+        <div class="stat-row"><span class="stat-label">Accel</span><div class="stat-bar-bg"><div class="stat-bar" style="width:${acc}%;background:#ffee44"></div></div></div>
+        <div class="stat-row"><span class="stat-label">Handle</span><div class="stat-bar-bg"><div class="stat-bar" style="width:${han}%;background:#88aaff"></div></div></div>
+        <div class="stat-row"><span class="stat-label">Armour</span><div class="stat-bar-bg"><div class="stat-bar" style="width:${arm}%;background:#ff8800"></div></div></div>
+      </div>
+      <div class="vcard-price ${isOwned?'price-owned':'price-cost'}">${isOwned?'OWNED':('$'+v.price.toLocaleString())}</div>
+    `;
+    if (isActive) {
+      const btn=document.createElement('button'); btn.className='vcard-btn btn-active'; btn.textContent='SELECTED';
+      card.appendChild(btn);
+    } else if (isOwned) {
+      const btn=document.createElement('button'); btn.className='vcard-btn btn-select'; btn.textContent='SELECT';
+      btn.addEventListener('click',()=>{ curVehicle=k; document.getElementById('vehicle-name').textContent=v.name; parkAllVehicles(); renderShop(); closeShop(); popup('Switched to '+v.name,'#ffcc00'); });
+      card.appendChild(btn);
+    } else if (canBuy) {
+      const btn=document.createElement('button'); btn.className='vcard-btn btn-buy'; btn.textContent='BUY $'+v.price.toLocaleString();
+      btn.addEventListener('click',()=>{ player.money-=v.price; document.getElementById('money-val').textContent=player.money; VEHICLES[k].unlocked=true; curVehicle=k; document.getElementById('vehicle-name').textContent=v.name; parkAllVehicles(); renderShop(); popup('Purchased '+v.name+'!','#4eff4e'); });
+      card.appendChild(btn);
+    } else {
+      const btn=document.createElement('button'); btn.className='vcard-btn btn-cant'; btn.textContent='$'+v.price.toLocaleString()+' NEEDED';
+      card.appendChild(btn);
+    }
+    grid.appendChild(card);
+  });
 }
 
-function setStormStatus(t,c) {
-  document.getElementById('storm-status').textContent = t;
-  document.getElementById('storm-status').style.color = c;
-}
-
-// ─────────────────────────────────────────
-// CONTROLS
-// ─────────────────────────────────────────
-const keys = {};
-document.addEventListener('keydown', e => {
-  if (keys[e.code]) return; keys[e.code] = true;
-  if (e.code==='Tab')  { e.preventDefault(); toggleCam(); }
-  if (e.code==='KeyE') dropProbe();
-  if (e.code==='KeyG') tryGarage();
+// ─── CONTROLS ────────────────────────────────────────────────
+const keys={};
+document.addEventListener('keydown',e=>{
+  if(keys[e.code])return; keys[e.code]=true;
+  if(e.code==='Tab'){e.preventDefault();toggleCam();}
+  if(e.code==='KeyE')dropProbe();
+  if(e.code==='KeyG'){if(shopOpen)closeShop();else tryGarage();}
+  if(e.code==='Escape')closeShop();
 });
-document.addEventListener('keyup', e => { keys[e.code] = false; });
+document.addEventListener('keyup',e=>{keys[e.code]=false;});
 
-function toggleCam() {
-  camMode = camMode==='follow' ? 'top' : 'follow';
-  activeCamera = camMode==='follow' ? followCam : topCam;
-  activeCamera.aspect = window.innerWidth/window.innerHeight;
-  activeCamera.updateProjectionMatrix();
-  document.getElementById('cam-mode').textContent = camMode==='follow' ? 'FOLLOW' : 'TOP-DOWN';
+function toggleCam(){
+  camMode=camMode==='follow'?'top':'follow';
+  activeCamera=camMode==='follow'?followCam:topCam;
+  activeCamera.aspect=window.innerWidth/window.innerHeight; activeCamera.updateProjectionMatrix();
+  document.getElementById('cam-mode').textContent=camMode==='follow'?'FOLLOW':'TOP-DOWN';
 }
-
-function dropProbe() {
-  if (probe.deployed) return;
-  if (!storm.active) { popup('No tornado active!','#ff8800'); return; }
+function dropProbe(){
+  if(probe.deployed)return;
+  if(!storm.active){popup('No tornado active!','#ff8800');return;}
   probe.deployed=true; probe.scored=false; probe.pos.copy(player.pos);
   probeMesh.position.set(player.pos.x,0.75,player.pos.z); probeMesh.visible=true;
-  probeRing.position.set(player.pos.x,0.05,player.pos.z);  probeRing.visible=true;
+  probeRing.position.set(player.pos.x,0.05,player.pos.z); probeRing.visible=true;
   document.getElementById('probe-status').textContent='DEPLOYED';
   document.getElementById('probe-status').style.color='#ff8800';
 }
-
-function tryGarage() {
-  if (player.pos.distanceTo(GARAGE_POS) > 45) return;
-  const ks = Object.keys(VEHICLES);
-  const next = ks[(ks.indexOf(curVehicle)+1) % ks.length];
-  curVehicle = next;
-  document.getElementById('vehicle-name').textContent = VEHICLES[next].name;
-  popup('Switched to '+VEHICLES[next].name,'#ffcc00');
+function tryGarage(){
+  if(player.pos.distanceTo(GARAGE_POS)>45)return;
+  openShop();
 }
 
-let popT = null;
-function popup(text, color='#ffee44') {
-  const el = document.getElementById('score-popup');
+let popT=null;
+function popup(text,color='#ffee44'){
+  const el=document.getElementById('score-popup');
   el.textContent=text; el.style.color=color; el.style.opacity='1';
-  if (popT) clearTimeout(popT);
-  popT = setTimeout(()=>{ el.style.opacity='0'; }, 2400);
+  if(popT)clearTimeout(popT);
+  popT=setTimeout(()=>{el.style.opacity='0';},2400);
 }
 
-// ─────────────────────────────────────────
-// UPDATE
-// ─────────────────────────────────────────
-function update(dt) {
-  if (!gameStarted) return;
-  dt = Math.min(dt, 0.05);
-  const veh = VEHICLES[curVehicle];
+// ─── UPDATE ──────────────────────────────────────────────────
+function update(dt){
+  if(!gameStarted||shopOpen)return;
+  dt=Math.min(dt,0.05);
+  const veh=VEHICLES[curVehicle];
 
-  const throttle = (keys['KeyW']||keys['ArrowUp']  ?1:0)-(keys['KeyS']||keys['ArrowDown'] ?1:0);
-  const turn     = (keys['KeyA']||keys['ArrowLeft'] ?1:0)-(keys['KeyD']||keys['ArrowRight']?1:0);
+  const throttle=(keys['KeyW']||keys['ArrowUp']?1:0)-(keys['KeyS']||keys['ArrowDown']?1:0);
+  const turn=(keys['KeyA']||keys['ArrowLeft']?1:0)-(keys['KeyD']||keys['ArrowRight']?1:0);
 
-  const onRoad = roadBoxes.some(b =>
-    Math.abs(player.pos.x - b.cx) < b.hw && Math.abs(player.pos.z - b.cz) < b.hd
-  );
-  const speedMult = onRoad ? 2 : 1;
+  const onRoad=roadBoxes.some(b=>Math.abs(player.pos.x-b.cx)<b.hw&&Math.abs(player.pos.z-b.cz)<b.hd);
+  const speedMult=onRoad?2:1;
 
-  player.speed += throttle*veh.accel*dt;
-  player.speed *= Math.pow(0.97, dt*60);
-  player.speed  = Math.max(-veh.maxSpeed*0.4, Math.min(veh.maxSpeed, player.speed));
-  if (Math.abs(player.speed)>0.5) player.angle += turn*veh.handling*dt*Math.sign(player.speed);
-  player.pos.x += Math.sin(player.angle)*player.speed*speedMult*dt;
-  player.pos.z += Math.cos(player.angle)*player.speed*speedMult*dt;
-  player.pos.x  = Math.max(-940, Math.min(940, player.pos.x));
-  player.pos.z  = Math.max(-940, Math.min(940, player.pos.z));
+  player.speed+=throttle*veh.accel*dt;
+  player.speed*=Math.pow(0.97,dt*60);
+  player.speed=Math.max(-veh.maxSpeed*0.4,Math.min(veh.maxSpeed,player.speed));
+  if(Math.abs(player.speed)>0.5) player.angle+=turn*veh.handling*dt*Math.sign(player.speed);
+  player.pos.x+=Math.sin(player.angle)*player.speed*speedMult*dt;
+  player.pos.z+=Math.cos(player.angle)*player.speed*speedMult*dt;
+  player.pos.x=Math.max(-940,Math.min(940,player.pos.x));
+  player.pos.z=Math.max(-940,Math.min(940,player.pos.z));
 
-  // Building collision — push player out of any overlapping box
-  for (const box of buildingBoxes) {
-    const ox = player.pos.x - box.cx;
-    const oz = player.pos.z - box.cz;
-    const px = box.hw - Math.abs(ox);
-    const pz = box.hd - Math.abs(oz);
-    if (px > 0 && pz > 0) {
-      // Resolve along axis of least penetration
-      if (px < pz) {
-        player.pos.x += px * Math.sign(ox);
-      } else {
-        player.pos.z += pz * Math.sign(oz);
-      }
-      player.speed *= 0.1; // kill speed on impact
+  for(const box of buildingBoxes){
+    const ox=player.pos.x-box.cx, oz=player.pos.z-box.cz;
+    const px=box.hw-Math.abs(ox), pz=box.hd-Math.abs(oz);
+    if(px>0&&pz>0){
+      if(px<pz) player.pos.x+=px*Math.sign(ox); else player.pos.z+=pz*Math.sign(oz);
+      player.speed*=0.1;
     }
   }
 
-  const parked = curVehicle==='pickup' ? 'interceptor' : 'pickup';
   vMeshes[curVehicle].position.set(player.pos.x,0,player.pos.z);
-  vMeshes[curVehicle].rotation.y = player.angle;
-  vMeshes[parked].position.set(GARAGE_POS.x+12, 0, GARAGE_POS.z+(curVehicle==='pickup'?8:-8));
+  vMeshes[curVehicle].rotation.y=player.angle;
 
   // Storm machine
-  nextStormIn -= dt;
-  if (nextStormIn<=0 && storm.phase==='clear') { startStorm(); nextStormIn=55+Math.random()*55; }
+  nextStormIn-=dt;
+  if(nextStormIn<=0&&storm.phase==='clear'){startStorm();nextStormIn=55+Math.random()*55;}
 
-  if (storm.phase==='building') {
-    storm.buildTimer += dt;
-    const p = Math.min(storm.buildTimer/storm.buildDuration, 1);
-    cloudMeshes.forEach(m=>{ m.material.opacity=p*0.85; });
+  if(storm.phase==='building'){
+    storm.buildTimer+=dt;
+    const p=Math.min(storm.buildTimer/storm.buildDuration,1);
+    cloudMeshes.forEach(m=>{m.material.opacity=p*0.85;});
     document.getElementById('progress-bar').style.width=(p*100)+'%';
     document.getElementById('progress-bar').style.background='#ff8800';
     setStormStatus('STORM BUILDING','#ffaa00');
-    if (p>=1) {
-      if (storm.willProduce) {
+    if(p>=1){
+      if(storm.willProduce){
         storm.phase='tornado'; spawnTornado();
-        setStormStatus('&#9888; TORNADO ON GROUND','#ff2222');
-        popup('&#9888; TORNADO ON THE GROUND!','#ff4444');
+        const tn=TORNADO_TYPES[tAI.type].name, ef=EF_SCALE[tAI.ef].label;
+        setStormStatus('⚠ TORNADO ON GROUND','#ff2222');
+        document.getElementById('tornado-type-label').textContent=ef+' '+tn;
+        popup('⚠ '+ef+' '+tn+'!','#ff4444');
       } else {
-        storm.phase='dissipating';
-        setStormStatus('STORM — NO TORNADO','#88aaff');
+        storm.phase='dissipating'; setStormStatus('STORM — NO TORNADO','#88aaff');
         popup('Storm produced no tornado.','#88aaff');
       }
     }
   }
 
-  if (storm.phase==='dissipating') {
+  if(storm.phase==='dissipating'){
     let allGone=true;
-    cloudMeshes.forEach(m=>{
-      m.material.opacity=Math.max(0,m.material.opacity-dt*0.25);
-      if (m.material.opacity>0) allGone=false;
-    });
-    if (allGone) {
-      storm.phase='clear';
-      setStormStatus('CLEAR','#4eff4e');
-      document.getElementById('progress-bar').style.width='0%';
-    }
+    cloudMeshes.forEach(m=>{m.material.opacity=Math.max(0,m.material.opacity-dt*0.25);if(m.material.opacity>0)allGone=false;});
+    if(allGone){storm.phase='clear';setStormStatus('CLEAR','#4eff4e');document.getElementById('progress-bar').style.width='0%';}
   }
 
-  // Tornado
-  if (storm.active) {
-    tAI.changeT -= dt;
-    if (tAI.changeT<=0) { tAI.heading+=(Math.random()-0.5)*0.5; tAI.changeT=3+Math.random()*5; }
-    tAI.pos.x += Math.sin(tAI.heading)*tAI.speed*dt;
-    tAI.pos.z -= Math.cos(tAI.heading)*tAI.speed*dt;
-    tAI.scale  = Math.min(tAI.scale+dt*0.25, 1);
+  // Tornado update
+  if(storm.active){
+    const type=TORNADO_TYPES[tAI.type], ef=EF_SCALE[tAI.ef];
+    tAI.changeT-=dt;
+    if(tAI.changeT<=0){
+      const ci=type.changeInterval;
+      tAI.heading+=(Math.random()-0.5)*0.55;
+      tAI.changeT=ci[0]+Math.random()*(ci[1]-ci[0]);
+    }
+    tAI.pos.x+=Math.sin(tAI.heading)*tAI.speed*dt;
+    tAI.pos.z-=Math.cos(tAI.heading)*tAI.speed*dt;
+    tAI.scale=Math.min(tAI.scale+dt*0.25,ef.sizeMult);
     tornadoGroup.position.set(tAI.pos.x,0,tAI.pos.z);
     tornadoGroup.scale.setScalar(tAI.scale);
+    tornadoGroup.rotation.y+=0.3*dt; // slow base spin
     cloudGroup.position.set(tAI.pos.x,0,tAI.pos.z);
 
-    tornadoRings.forEach(r=>{ r.mesh.rotation.y+=r.spin*dt; });
-    for (let i=0;i<NDEBRIS;i++) {
-      const d=dData[i]; d.a+=d.speed*dt;
-      const r=d.baseR*(0.82+0.18*Math.sin(d.a*0.3));
-      dBuf[i*3]=Math.cos(d.a)*r; dBuf[i*3+2]=Math.sin(d.a)*r;
+    tornadoRings.forEach(r=>{r.mesh.rotation.y+=r.spin*dt;});
+
+    // Multi-vortex orbit
+    if(tornadoSubGroups.length>0){
+      const t=Date.now()*0.0008;
+      tornadoSubGroups.forEach((sg,i)=>{
+        const a=t+i*(Math.PI*2/3), orbitR=12;
+        sg.position.set(Math.cos(a)*orbitR,0,Math.sin(a)*orbitR);
+      });
     }
-    dGeo.attributes.position.needsUpdate=true;
 
-    if (Math.abs(tAI.pos.x)>920||Math.abs(tAI.pos.z)>920) dissipate();
+    // Debris
+    if(tornadoDebrisBuf){
+      for(let i=0;i<tornadoDebrisData.length;i++){
+        const d=tornadoDebrisData[i]; d.a+=d.speed*dt;
+        const r=d.baseR*(0.82+0.18*Math.sin(d.a*0.3));
+        tornadoDebrisBuf[i*3]=Math.cos(d.a)*r; tornadoDebrisBuf[i*3+2]=Math.sin(d.a)*r;
+      }
+      tornadoDebrisGeo.attributes.position.needsUpdate=true;
+    }
 
+    if(Math.abs(tAI.pos.x)>920||Math.abs(tAI.pos.z)>920) dissipate();
+
+    // Distance & danger
     const dx=player.pos.x-tAI.pos.x, dz=player.pos.z-tAI.pos.z;
     const dist=Math.sqrt(dx*dx+dz*dz);
+    const dangerR=type.dangerRadius*ef.sizeMult;
     document.getElementById('tornado-dist').textContent=Math.floor(dist)+'m';
 
     const dEl=document.getElementById('danger-val');
-    if (dist<14) {
-      if (veh.canIntercept) {
+    if(dist<dangerR){
+      if(veh.canIntercept){
         dEl.textContent='INTERCEPTING'; dEl.className='hud-value orange';
-        player.money+=Math.floor(160*dt);
-        document.getElementById('money-val').textContent=player.money;
-      } else { dEl.textContent='CRITICAL!'; dEl.className='hud-value red'; }
-    } else if (dist<35) { dEl.textContent='HIGH';     dEl.className='hud-value orange'; }
-    else if  (dist<80)  { dEl.textContent='MODERATE'; dEl.className='hud-value yellow'; }
-    else                { dEl.textContent='SAFE';      dEl.className='hud-value green';  }
+        const earn=Math.floor(ef.interceptPay*dt);
+        player.money+=earn; document.getElementById('money-val').textContent=player.money;
+      } else {dEl.textContent='CRITICAL!'; dEl.className='hud-value red';}
+    } else if(dist<dangerR*2.5){dEl.textContent='HIGH';dEl.className='hud-value orange';}
+    else if(dist<dangerR*6){dEl.textContent='MODERATE';dEl.className='hud-value yellow';}
+    else {dEl.textContent='SAFE';dEl.className='hud-value green';}
 
-    if (probe.deployed&&!probe.scored) {
+    // Probe scoring
+    if(probe.deployed&&!probe.scored){
       const pdx=probe.pos.x-tAI.pos.x, pdz=probe.pos.z-tAI.pos.z;
       const pd=Math.sqrt(pdx*pdx+pdz*pdz);
-      if (pd<22) {
+      const pr=type.probeRadius*ef.sizeMult;
+      if(pd<pr){
         probe.scored=true;
-        const payout=Math.floor(500+(1-pd/22)*1500);
-        player.money+=payout;
-        document.getElementById('money-val').textContent=player.money;
+        const accuracy=Math.max(0,1-pd/pr);
+        const payout=Math.floor((type.payoutBase+accuracy*type.payoutBonus)*ef.payoutMult);
+        player.money+=payout; document.getElementById('money-val').textContent=player.money;
         popup('+$'+payout+'  PROBE HIT!','#4eff4e');
-        setTimeout(()=>{
-          probe.deployed=false; probeMesh.visible=false; probeRing.visible=false;
+        setTimeout(()=>{probe.deployed=false;probeMesh.visible=false;probeRing.visible=false;
           document.getElementById('probe-status').textContent='READY';
-          document.getElementById('probe-status').style.color='';
-        }, 3200);
+          document.getElementById('probe-status').style.color='';},3200);
       }
     }
-    if (probe.deployed) probeRingMat.opacity=0.4+0.3*Math.sin(Date.now()*0.005);
+    if(probe.deployed) probeRingMat.opacity=0.4+0.3*Math.sin(Date.now()*0.005);
 
   } else {
     document.getElementById('tornado-dist').textContent='N/A';
-    const dEl=document.getElementById('danger-val');
-    dEl.textContent='SAFE'; dEl.className='hud-value green';
+    document.getElementById('danger-val').textContent='SAFE';
+    document.getElementById('danger-val').className='hud-value green';
   }
 
-  document.getElementById('garage-prompt').style.display =
-    player.pos.distanceTo(GARAGE_POS)<45 ? 'block' : 'none';
+  document.getElementById('garage-prompt').style.display=player.pos.distanceTo(GARAGE_POS)<45?'block':'none';
+  document.getElementById('speed-val').textContent=Math.floor(Math.abs(player.speed)*2.237)+' mph';
 
-  document.getElementById('speed-val').textContent=
-    Math.floor(Math.abs(player.speed)*2.237)+' mph';
-
-  if (camMode==='follow') {
-    const target=player.pos.clone().add(new THREE.Vector3(
-      -Math.sin(player.angle)*14, 6, -Math.cos(player.angle)*14));
-    followCam.position.lerp(target, 0.12);
-    followCam.lookAt(player.pos.x, 1.5, player.pos.z);
+  if(camMode==='follow'){
+    const target=player.pos.clone().add(new THREE.Vector3(-Math.sin(player.angle)*14,6,-Math.cos(player.angle)*14));
+    followCam.position.lerp(target,0.12); followCam.lookAt(player.pos.x,1.5,player.pos.z);
   } else {
-    topCam.position.set(player.pos.x, 220, player.pos.z+90);
-    topCam.lookAt(player.pos.x, 0, player.pos.z);
+    topCam.position.set(player.pos.x,220,player.pos.z+90); topCam.lookAt(player.pos.x,0,player.pos.z);
   }
 }
 
-// ─────────────────────────────────────────
-// RENDER LOOP
-// ─────────────────────────────────────────
-function animate() {
-  requestAnimationFrame(animate);
-  update(clock.getDelta());
-  renderer.render(scene, activeCamera);
-}
+// ─── RENDER LOOP ─────────────────────────────────────────────
+function animate(){requestAnimationFrame(animate);update(clock.getDelta());renderer.render(scene,activeCamera);}
 
-window.addEventListener('resize', () => {
+window.addEventListener('resize',()=>{
   followCam.aspect=topCam.aspect=window.innerWidth/window.innerHeight;
   followCam.updateProjectionMatrix(); topCam.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setSize(window.innerWidth,window.innerHeight);
 });
 
-// ─────────────────────────────────────────
-// START SCREEN
-// ─────────────────────────────────────────
-let gameStarted = false;
-
-document.getElementById('start-btn').addEventListener('click', () => {
-  const screen = document.getElementById('start-screen');
-  screen.classList.add('fade-out');
-  screen.addEventListener('transitionend', () => screen.remove(), { once: true });
-  gameStarted = true;
-  clock.getDelta(); // discard any accumulated dt
+// ─── START SCREEN ────────────────────────────────────────────
+let gameStarted=false;
+document.getElementById('start-btn').addEventListener('click',()=>{
+  const s=document.getElementById('start-screen');
+  s.classList.add('fade-out');
+  s.addEventListener('transitionend',()=>s.remove(),{once:true});
+  gameStarted=true; clock.getDelta();
 });
 
 animate();
