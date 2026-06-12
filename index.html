@@ -32,6 +32,12 @@
   #storm-name   { font-size: 11px; color: #999; text-transform: uppercase; letter-spacing: 2px; }
   #storm-status { font-size: 16px; font-weight: bold; margin-top: 3px; }
   #tornado-type-label { font-size: 11px; color: #aabbdd; margin-top: 2px; min-height: 14px; }
+  #tornado-timer {
+    font-size: 28px; font-weight: bold; font-variant-numeric: tabular-nums;
+    margin-top: 4px; min-height: 36px; letter-spacing: 1px;
+  }
+  #tornado-timer.urgent { animation: pulse-red 0.6s ease-in-out infinite; }
+  @keyframes pulse-red { 0%,100%{color:#ff4444;} 50%{color:#ff9900;} }
   #progress-bar-bg {
     width: 190px; height: 6px; background: rgba(255,255,255,0.1);
     border-radius: 3px; margin: 6px auto 0; overflow: hidden;
@@ -216,6 +222,7 @@
     <div id="storm-name">Storm Activity</div>
     <div id="storm-status" style="color:#4eff4e">CLEAR</div>
     <div id="tornado-type-label"></div>
+    <div id="tornado-timer"></div>
     <div id="progress-bar-bg"><div id="progress-bar"></div></div>
   </div>
 
@@ -755,6 +762,8 @@ function dissipate() {
   document.getElementById('probe-status').textContent='READY';
   document.getElementById('probe-status').style.color='';
   document.getElementById('tornado-type-label').textContent='';
+  document.getElementById('tornado-timer').textContent='';
+  document.getElementById('tornado-timer').className='';
   storm.phase='dissipating'; setStormStatus('TORNADO DISSIPATED','#88aaff');
 }
 function setStormStatus(t,c){document.getElementById('storm-status').textContent=t;document.getElementById('storm-status').style.color=c;}
@@ -982,6 +991,11 @@ function update(dt){
 
     tAI.lifeTimer+=dt;
     if(tAI.lifeTimer>=tAI.lifeDuration||Math.abs(tAI.pos.x)>920||Math.abs(tAI.pos.z)>920) dissipate();
+    const remaining=Math.max(0,tAI.lifeDuration-tAI.lifeTimer);
+    const mins=Math.floor(remaining/60), secs=Math.floor(remaining%60);
+    const timerEl=document.getElementById('tornado-timer');
+    timerEl.textContent=mins+':'+(secs<10?'0':'')+secs;
+    timerEl.className=remaining<15?'urgent':'';
 
     // Distance & danger
     const dx=player.pos.x-tAI.pos.x, dz=player.pos.z-tAI.pos.z;
