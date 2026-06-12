@@ -382,8 +382,8 @@ BRIDGE_ZONES.forEach(bz => {
   scene.add(deck);
   roadBoxes.push({cx:bz.cx, cz:bz.cz, hw:RIVER_W/2+3, hd:bz.hd});
   [-1,1].forEach(side => {
-    const rail = new THREE.Mesh(new THREE.BoxGeometry(0.5,1.2,bz.hd*2-0.4), bRailMat);
-    rail.position.set(bz.cx + side*(RIVER_W/2+2.8), 0.65, bz.cz);
+    const rail = new THREE.Mesh(new THREE.BoxGeometry(RIVER_W+6, 1.2, 0.5), bRailMat);
+    rail.position.set(bz.cx, 0.65, bz.cz + side*(bz.hd - 0.25));
     scene.add(rail);
   });
 });
