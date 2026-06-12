@@ -566,6 +566,13 @@ const probe={deployed:false,pos:new THREE.Vector3(),scored:false};
 
 // ─── STORM CLOUDS ────────────────────────────────────────────
 const cloudGroup=new THREE.Group(); scene.add(cloudGroup);
+
+// Cloud shadow disc on ground
+const cloudShadowMat=new THREE.MeshBasicMaterial({color:0x000000,transparent:true,opacity:0,
+  polygonOffset:true,polygonOffsetFactor:-6,polygonOffsetUnits:-6,depthWrite:false});
+const cloudShadow=new THREE.Mesh(new THREE.CircleGeometry(160,40),cloudShadowMat);
+cloudShadow.rotation.x=-Math.PI/2; cloudShadow.position.y=0.08;
+scene.add(cloudShadow);
 let cloudMeshes=[];
 function buildClouds(cx,cz) {
   cloudMeshes.forEach(m=>cloudGroup.remove(m)); cloudMeshes=[];
@@ -907,6 +914,8 @@ function update(dt){
     storm.buildTimer+=dt;
     const p=Math.min(storm.buildTimer/storm.buildDuration,1);
     cloudMeshes.forEach(m=>{m.material.opacity=p*0.85;});
+    cloudShadow.material.opacity=p*0.35;
+    cloudShadow.position.set(tAI.pos.x,0.08,tAI.pos.z);
     document.getElementById('progress-bar').style.width=(p*100)+'%';
     document.getElementById('progress-bar').style.background='#ff8800';
     setStormStatus('STORM BUILDING','#ffaa00');
@@ -927,6 +936,7 @@ function update(dt){
   if(storm.phase==='dissipating'){
     let allGone=true;
     cloudMeshes.forEach(m=>{m.material.opacity=Math.max(0,m.material.opacity-dt*0.25);if(m.material.opacity>0)allGone=false;});
+    cloudShadow.material.opacity=Math.max(0,cloudShadow.material.opacity-dt*0.25);
     if(allGone){storm.phase='clear';setStormStatus('CLEAR','#4eff4e');document.getElementById('progress-bar').style.width='0%';}
   }
 
@@ -946,6 +956,8 @@ function update(dt){
     tornadoGroup.scale.setScalar(tAI.scale);
     tornadoGroup.rotation.y+=0.3*dt; // slow base spin
     cloudGroup.position.set(tAI.pos.x,0,tAI.pos.z);
+    cloudShadow.position.set(tAI.pos.x,0.08,tAI.pos.z);
+    cloudShadow.material.opacity=0.35*tAI.scale;
 
     tornadoRings.forEach(r=>{r.mesh.rotation.y+=r.spin*dt;});
 
