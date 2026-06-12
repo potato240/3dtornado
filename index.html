@@ -704,7 +704,7 @@ const storm={phase:'clear',buildTimer:0,buildDuration:40,willProduce:false,activ
 let nextStormIn=12+Math.random()*20;
 
 const tAI={pos:new THREE.Vector3(400,0,-300),heading:Math.PI*0.2+(Math.random()-0.5)*0.6,
-           speed:4,scale:0,changeT:0,type:'cone',ef:2};
+           speed:4,scale:0,changeT:0,type:'cone',ef:2,lifeTimer:0,lifeDuration:90};
 
 function startStorm() {
   storm.phase='building'; storm.buildTimer=0; storm.willProduce=Math.random()<0.6;
@@ -718,6 +718,7 @@ function spawnTornado() {
   tAI.ef=pickEF();
   const type=TORNADO_TYPES[tAI.type], ef=EF_SCALE[tAI.ef];
   tAI.speed=type.speed;
+  tAI.lifeTimer=0; tAI.lifeDuration=60+Math.random()*60;
   tAI.scale=0; tAI.heading=Math.PI*0.2+(Math.random()-0.5)*0.8;
   buildTornadoMesh(tAI.type, tAI.ef);
   tornadoGroup.visible=true; storm.active=true;
@@ -934,7 +935,8 @@ function update(dt){
       tornadoDebrisGeo.attributes.position.needsUpdate=true;
     }
 
-    if(Math.abs(tAI.pos.x)>920||Math.abs(tAI.pos.z)>920) dissipate();
+    tAI.lifeTimer+=dt;
+    if(tAI.lifeTimer>=tAI.lifeDuration||Math.abs(tAI.pos.x)>920||Math.abs(tAI.pos.z)>920) dissipate();
 
     // Distance & danger
     const dx=player.pos.x-tAI.pos.x, dz=player.pos.z-tAI.pos.z;
