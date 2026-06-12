@@ -385,19 +385,33 @@ for (let i = 0; i < 50; i++) {
 // ROADS
 // ─────────────────────────────────────────
 const roadMat = new THREE.MeshLambertMaterial({ color: 0x2e2e2e,
-  polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
+  polygonOffset: true, polygonOffsetFactor: -4, polygonOffsetUnits: -4 });
 const roadBoxes = [];
 function road(x, z, w, d) {
   const m = new THREE.Mesh(new THREE.PlaneGeometry(w, d), roadMat);
   m.rotation.x = -Math.PI / 2;
-  m.position.set(x, 0.02, z);
+  m.position.set(x, 0.05, z);
   scene.add(m);
   roadBoxes.push({ cx: x, cz: z, hw: w/2, hd: d/2 });
 }
-road(0, 0, 900, 12);
-road(0, 0, 12, 900);
-for (let z = -120; z <= 120; z += 60) road(0, z, 280, 9);
-for (let x = -120; x <= 120; x += 60) road(x, 0, 9, 280);
+
+// Main highways
+road(0,    0,  1800, 14); // E-W
+road(0,    0,  14, 1800); // N-S
+road(400,  0,  14,  800); // parallel N-S east
+road(-400, 0,  14,  800); // parallel N-W west
+road(0,  350, 800,  12);  // E-W rural north
+road(0, -350, 800,  12);  // E-W rural south
+
+// Town grid — denser
+for (let z = -150; z <= 150; z += 50) road(0,   z, 320, 9);
+for (let x = -150; x <= 150; x += 50) road(x,   0,   9, 320);
+
+// Outer ring road
+road(  0, 250, 520, 10);
+road(  0,-250, 520, 10);
+road( 250,  0,  10, 520);
+road(-250,  0,  10, 520);
 
 // ─────────────────────────────────────────
 // BUILDINGS
