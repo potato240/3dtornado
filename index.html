@@ -143,6 +143,15 @@
   .btn-buy:hover { background: #ee9900; }
   .btn-cant    { background: rgba(255,255,255,0.06); color: #666; cursor: not-allowed; }
   .btn-active  { background: rgba(255,200,0,0.15); color: #ffcc00; cursor: default; border: 1px solid #664400; }
+  .btn-repair  { background: #336633; color: #4eff4e; border: 1px solid #4a884a; }
+  .btn-repair:hover { background: #448844; }
+  #rebuild-section {
+    width: 100%; max-width: 900px; margin-bottom: 14px;
+    background: rgba(255,80,20,0.07); border: 1px solid rgba(255,100,30,0.25);
+    border-radius: 10px; padding: 14px 18px; display: flex; align-items: center; gap: 16px;
+  }
+  #rebuild-label { font-size: 13px; color: #ff9966; flex: 1; }
+  #rebuild-cost  { font-size: 13px; color: #ffcc00; font-weight: bold; }
 
   /* ── START SCREEN ── */
   #start-screen {
@@ -252,6 +261,11 @@
     <div id="shop-title">&#9881; GARAGE SHOP</div>
     <div id="shop-balance">$<span id="shop-money-val">5000</span></div>
     <button id="shop-close-btn">CLOSE [G]</button>
+  </div>
+  <div id="rebuild-section" style="display:none">
+    <div id="rebuild-label">Buildings destroyed by tornado</div>
+    <div id="rebuild-cost"></div>
+    <div id="rebuild-btn-wrap"></div>
   </div>
   <div id="vehicle-grid"></div>
 </div>
@@ -392,14 +406,44 @@ BRIDGE_ZONES.forEach(bz => {
 // ─── BUILDINGS ───────────────────────────────────────────────
 const bMats = [0xc8b99a,0xa8a8a8,0xd4c5a9,0x8a7a6a,0xb2bcc4].map(c=>new THREE.MeshLambertMaterial({color:c}));
 const rMats = [0x444444,0x555544,0x666655].map(c=>new THREE.MeshLambertMaterial({color:c}));
+const rubbleMat = new THREE.MeshLambertMaterial({color:0x6a5a44});
 const buildingBoxes = [];
+const buildings = [];
 
-function building(x, z, w, h, d) {
+function building(x, z, w, h, d, fixed=false) {
   const b = new THREE.Mesh(new THREE.BoxGeometry(w,h,d), bMats[Math.floor(Math.random()*bMats.length)]);
   b.position.set(x,h/2,z); b.castShadow=true; b.receiveShadow=true; scene.add(b);
   const r = new THREE.Mesh(new THREE.BoxGeometry(w+0.4,0.35,d+0.4), rMats[Math.floor(Math.random()*rMats.length)]);
   r.position.set(x,h+0.18,z); scene.add(r);
+  const boxIdx = buildingBoxes.length;
   buildingBoxes.push({ cx:x, cz:z, hw:w/2+1.5, hd:d/2+1.5 });
+  buildings.push({ meshes:[b,r], boxIdx, x, z, w, h, d, health:100, destroyed:false, fixed });
+}
+
+function collapseBuilding(bd) {
+  if(bd.destroyed || bd.fixed) return;
+  bd.destroyed = true;
+  bd.meshes.forEach(m => scene.remove(m));
+  const rubble = new THREE.Mesh(new THREE.BoxGeometry(bd.w, 0.7, bd.d), rubbleMat);
+  rubble.position.set(bd.x, 0.35, bd.z); scene.add(rubble);
+  bd.rubbleMesh = rubble;
+  buildingBoxes[bd.boxIdx] = null; // remove collision
+}
+
+function rebuildBuildings() {
+  const wrecked = buildings.filter(b=>b.destroyed&&!b.fixed);
+  const cost = wrecked.length * 300;
+  if(player.money < cost) return;
+  player.money -= cost;
+  document.getElementById('money-val').textContent = player.money;
+  wrecked.forEach(bd => {
+    bd.destroyed = false; bd.health = 100;
+    if(bd.rubbleMesh){ scene.remove(bd.rubbleMesh); bd.rubbleMesh=null; }
+    bd.meshes.forEach(m => scene.add(m));
+    buildingBoxes[bd.boxIdx] = { cx:bd.x, cz:bd.z, hw:bd.w/2+1.5, hd:bd.d/2+1.5 };
+  });
+  renderShop();
+  popup('Buildings rebuilt!','#4eff4e');
 }
 [[-80,-80,18,12,14],[-80,-20,22,8,16],[-80,40,16,10,13],
  [-20,-80,20,15,18],[-20,-20,26,6,20],[-20,40,18,9,14],
@@ -420,7 +464,7 @@ wtTank.position.set(105,19,-105); scene.add(wtTank);
 
 // Garage
 const GARAGE_POS = new THREE.Vector3(-210,0,0);
-building(-210,0,32,8,22);
+building(-210,0,32,8,22,true);
 const signMesh = new THREE.Mesh(new THREE.BoxGeometry(22,3.5,0.3),new THREE.MeshLambertMaterial({color:0xffaa00}));
 signMesh.position.set(-210,10.5,-11.2); scene.add(signMesh);
 
@@ -837,6 +881,25 @@ document.getElementById('shop-close-btn').addEventListener('click',closeShop);
 
 function renderShop() {
   document.getElementById('shop-money-val').textContent=player.money;
+
+  // Rebuild section
+  const wrecked = buildings.filter(b=>b.destroyed&&!b.fixed);
+  const rebuildSec = document.getElementById('rebuild-section');
+  if(wrecked.length > 0){
+    rebuildSec.style.display='flex';
+    const cost = wrecked.length * 300;
+    document.getElementById('rebuild-label').textContent =
+      wrecked.length+' building'+(wrecked.length>1?'s':'')+' destroyed by tornado';
+    document.getElementById('rebuild-cost').textContent = '$'+cost.toLocaleString();
+    const wrap = document.getElementById('rebuild-btn-wrap'); wrap.innerHTML='';
+    const btn = document.createElement('button');
+    btn.className = player.money>=cost ? 'vcard-btn btn-repair' : 'vcard-btn btn-cant';
+    btn.textContent = 'REBUILD';
+    if(player.money>=cost) btn.addEventListener('click', rebuildBuildings);
+    wrap.appendChild(btn);
+  } else {
+    rebuildSec.style.display='none';
+  }
   const grid=document.getElementById('vehicle-grid');
   grid.innerHTML='';
   Object.entries(VEHICLES).forEach(([k,v])=>{
@@ -957,6 +1020,7 @@ function update(dt){
   player.pos.z=Math.max(-940,Math.min(940,player.pos.z));
 
   for(const box of buildingBoxes){
+    if(!box) continue;
     const ox=player.pos.x-box.cx, oz=player.pos.z-box.cz;
     const px=box.hw-Math.abs(ox), pz=box.hd-Math.abs(oz);
     if(px>0&&pz>0){
@@ -1078,6 +1142,18 @@ function update(dt){
     } else if(dist<dangerR*2.5){dEl.textContent='HIGH';dEl.className='hud-value orange';}
     else if(dist<dangerR*6){dEl.textContent='MODERATE';dEl.className='hud-value yellow';}
     else {dEl.textContent='SAFE';dEl.className='hud-value green';}
+
+    // Building destruction
+    const bDmgR = dangerR * 1.8;
+    buildings.forEach(bd => {
+      if(bd.destroyed || bd.fixed) return;
+      const bdx=bd.x-tAI.pos.x, bdz=bd.z-tAI.pos.z;
+      const bd2=Math.sqrt(bdx*bdx+bdz*bdz);
+      if(bd2 < bDmgR){
+        bd.health -= (1-bd2/bDmgR)*ef.sizeMult*12*dt;
+        if(bd.health <= 0) collapseBuilding(bd);
+      }
+    });
 
     // Probe scoring
     if(probe.deployed&&!probe.scored){
