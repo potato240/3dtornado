@@ -455,7 +455,7 @@ const chairMat = new THREE.MeshLambertMaterial({color:0x6a4a2a});
 
 function building(x, z, w, h, d, fixed=false) {
   const wallMat = bMats[Math.floor(Math.random()*bMats.length)].clone();
-  wallMat.side = THREE.DoubleSide; wallMat.transparent = true; wallMat.opacity = 1;
+  wallMat.side = THREE.DoubleSide; wallMat.transparent = false; wallMat.opacity = 1;
   const b = new THREE.Mesh(new THREE.BoxGeometry(w,h,d), wallMat);
   b.position.set(x,h/2,z); b.castShadow=true; b.receiveShadow=true; scene.add(b);
   const r = new THREE.Mesh(new THREE.BoxGeometry(w+0.4,0.35,d+0.4), rMats[Math.floor(Math.random()*rMats.length)].clone());
@@ -998,7 +998,7 @@ function endSurvival(){
   survivalMode=false;
   activeCamera=camMode==='follow'?followCam:topCam;
   document.exitPointerLock();
-  buildings.forEach(bd=>{ if(!bd.destroyed){ bd.meshes[0].material.opacity=1; } });
+  buildings.forEach(bd=>{ if(!bd.destroyed){ const mat=bd.meshes[0].material; mat.transparent=false; mat.opacity=1; } });
   document.getElementById('survival-bar').style.display='none';
   document.getElementById('top-bar').style.opacity='1';
   document.getElementById('storm-bar').style.display='';
@@ -1169,11 +1169,28 @@ function update(dt){
     footPlayer.pos.x=Math.max(-940,Math.min(940,footPlayer.pos.x));
     footPlayer.pos.z=Math.max(-940,Math.min(940,footPlayer.pos.z));
 
-    // Building transparency — walls fade when player is inside
+    // Building wall collision — push player out of walls; door gap on south face allows entry
+    buildings.forEach(bd=>{
+      if(bd.destroyed) return;
+      const px=footPlayer.pos.x-bd.x, pz=footPlayer.pos.z-bd.z;
+      const hw=bd.w/2+0.15, hd=bd.d/2+0.15;
+      if(Math.abs(px)>hw||Math.abs(pz)>hd) return;
+      const innerHw=hw-0.5, innerHd=hd-0.5;
+      if(Math.abs(px)<innerHw&&Math.abs(pz)<innerHd) return; // fully inside — free
+      const inDoor=pz>0&&pz>hd-0.55&&Math.abs(px)<1.1; // south-face door gap
+      if(inDoor) return;
+      const dx=hw-Math.abs(px), dz=hd-Math.abs(pz);
+      if(dx<dz) footPlayer.pos.x=bd.x+hw*Math.sign(px);
+      else footPlayer.pos.z=bd.z+hd*Math.sign(pz);
+    });
+
+    // Building transparency — walls fade when player is inside; toggle transparent flag to keep depth-write correct
     buildings.forEach(bd=>{
       if(bd.destroyed) return;
       const inside=Math.abs(footPlayer.pos.x-bd.x)<bd.w/2-0.3&&Math.abs(footPlayer.pos.z-bd.z)<bd.d/2-0.3;
-      bd.meshes[0].material.opacity = inside ? 0.12 : 1;
+      const mat=bd.meshes[0].material;
+      mat.transparent=inside;
+      mat.opacity=inside?0.12:1;
     });
 
     // fpCam position and orientation
