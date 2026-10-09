@@ -153,6 +153,21 @@
   #rebuild-label { font-size: 13px; color: #ff9966; flex: 1; }
   #rebuild-cost  { font-size: 13px; color: #ffcc00; font-weight: bold; }
 
+  /* ── SURVIVAL MODE ── */
+  #survival-bar {
+    display:none; position:absolute; top:16px; left:50%; transform:translateX(-50%);
+    background:rgba(0,0,0,0.85); border:1px solid rgba(255,80,30,0.55);
+    border-radius:8px; padding:10px 22px; text-align:center; min-width:280px; z-index:5;
+    flex-direction:column; gap:5px;
+  }
+  #surv-title { font-size:10px; color:#ff8866; text-transform:uppercase; letter-spacing:2px; }
+  #surv-timer { font-size:24px; font-weight:bold; color:#fff; }
+  #surv-health-bg { width:100%; height:8px; background:rgba(255,255,255,0.1); border-radius:4px; overflow:hidden; }
+  #surv-health-bar { height:100%; background:#ff4444; border-radius:4px; transition:width 0.15s; }
+  #surv-shelter { font-size:10px; color:#4eff4e; min-height:13px; }
+  #surv-exit { background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:4px; color:#ccc; font-family:'Courier New',monospace; font-size:11px; padding:4px 12px; cursor:pointer; margin-top:2px; }
+  #surv-exit:hover { background:rgba(255,255,255,0.18); color:#fff; }
+
   /* ── START SCREEN ── */
   #start-screen {
     position: fixed; inset: 0;
@@ -252,6 +267,13 @@
     <p>Press <strong>G</strong> to open shop</p>
   </div>
 
+  <div id="survival-bar">
+    <div id="surv-title">⚠ SURVIVAL MODE</div>
+    <div id="surv-timer">0:00</div>
+    <div id="surv-health-bg"><div id="surv-health-bar" style="width:100%"></div></div>
+    <div id="surv-shelter"></div>
+    <button id="surv-exit" onclick="endSurvival()">EXIT [G]</button>
+  </div>
   <div id="score-popup"></div>
 </div>
 
@@ -308,7 +330,22 @@ const clock = new THREE.Clock();
 // ─── CAMERAS ─────────────────────────────────────────────────
 const followCam = new THREE.PerspectiveCamera(70, window.innerWidth/window.innerHeight, 0.5, 2000);
 const topCam    = new THREE.PerspectiveCamera(55, window.innerWidth/window.innerHeight, 1, 3000);
+const fpCam     = new THREE.PerspectiveCamera(80, window.innerWidth/window.innerHeight, 0.1, 2000);
 let activeCamera = followCam, camMode = 'follow';
+
+// ─── SURVIVAL MODE ────────────────────────────────────────────
+const footPlayer = { pos: new THREE.Vector3(-195,0,-8), yaw:0, pitch:0 };
+let survivalMode=false, survivalHealth=100, survivalTimer=0;
+let pointerLocked=false;
+
+document.addEventListener('pointerlockchange', ()=>{
+  pointerLocked = document.pointerLockElement === renderer.domElement;
+});
+document.addEventListener('mousemove', e=>{
+  if(!survivalMode || !pointerLocked) return;
+  footPlayer.yaw  -= e.movementX * 0.0022;
+  footPlayer.pitch = Math.max(-1.1, Math.min(0.7, footPlayer.pitch - e.movementY * 0.0022));
+});
 
 // ─── LIGHTING ────────────────────────────────────────────────
 scene.add(new THREE.AmbientLight(0x607090, 0.9));
@@ -410,20 +447,27 @@ const rubbleMat = new THREE.MeshLambertMaterial({color:0x6a5a44});
 const buildingBoxes = [];
 const buildings = [];
 
+const interiorFloorMat = new THREE.MeshLambertMaterial({color:0x7a6a58});
 function building(x, z, w, h, d, fixed=false) {
-  const b = new THREE.Mesh(new THREE.BoxGeometry(w,h,d), bMats[Math.floor(Math.random()*bMats.length)]);
+  const wallMat = bMats[Math.floor(Math.random()*bMats.length)].clone();
+  wallMat.side = THREE.DoubleSide; wallMat.transparent = true; wallMat.opacity = 1;
+  const b = new THREE.Mesh(new THREE.BoxGeometry(w,h,d), wallMat);
   b.position.set(x,h/2,z); b.castShadow=true; b.receiveShadow=true; scene.add(b);
-  const r = new THREE.Mesh(new THREE.BoxGeometry(w+0.4,0.35,d+0.4), rMats[Math.floor(Math.random()*rMats.length)]);
+  const r = new THREE.Mesh(new THREE.BoxGeometry(w+0.4,0.35,d+0.4), rMats[Math.floor(Math.random()*rMats.length)].clone());
   r.position.set(x,h+0.18,z); scene.add(r);
+  const iFloor = new THREE.Mesh(new THREE.PlaneGeometry(w-0.5, d-0.5), interiorFloorMat);
+  iFloor.rotation.x = -Math.PI/2; iFloor.position.set(x, 0.08, z);
+  scene.add(iFloor);
   const boxIdx = buildingBoxes.length;
   buildingBoxes.push({ cx:x, cz:z, hw:w/2+1.5, hd:d/2+1.5 });
-  buildings.push({ meshes:[b,r], boxIdx, x, z, w, h, d, health:100, destroyed:false, fixed });
+  buildings.push({ meshes:[b,r], iFloor, boxIdx, x, z, w, h, d, health:100, destroyed:false, fixed });
 }
 
 function collapseBuilding(bd) {
   if(bd.destroyed || bd.fixed) return;
   bd.destroyed = true;
   bd.meshes.forEach(m => scene.remove(m));
+  if(bd.iFloor) scene.remove(bd.iFloor);
   const rubble = new THREE.Mesh(new THREE.BoxGeometry(bd.w, 0.7, bd.d), rubbleMat);
   rubble.position.set(bd.x, 0.35, bd.z); scene.add(rubble);
   bd.rubbleMesh = rubble;
@@ -440,6 +484,7 @@ function rebuildBuildings() {
     bd.destroyed = false; bd.health = 100;
     if(bd.rubbleMesh){ scene.remove(bd.rubbleMesh); bd.rubbleMesh=null; }
     bd.meshes.forEach(m => scene.add(m));
+    if(bd.iFloor) scene.add(bd.iFloor);
     buildingBoxes[bd.boxIdx] = { cx:bd.x, cz:bd.z, hw:bd.w/2+1.5, hd:bd.d/2+1.5 };
   });
   renderShop();
@@ -865,6 +910,43 @@ function dissipate() {
 }
 function setStormStatus(t,c){document.getElementById('storm-status').textContent=t;document.getElementById('storm-status').style.color=c;}
 
+function startSurvival(){
+  closeShop();
+  survivalMode=true; survivalHealth=100; survivalTimer=0;
+  footPlayer.pos.set(player.pos.x,0,player.pos.z);
+  footPlayer.yaw=player.angle; footPlayer.pitch=0;
+  activeCamera=fpCam;
+  renderer.domElement.requestPointerLock();
+  // Spawn wedge tornado from map edge heading toward town
+  const ang=Math.random()*Math.PI*2;
+  tAI.pos.set(Math.cos(ang)*700,0,Math.sin(ang)*700);
+  tAI.heading=Math.atan2(-Math.sin(ang),-Math.cos(ang));
+  tAI.type='wedge'; tAI.ef=2; tAI.scale=1;
+  tAI.lifeTimer=0; tAI.lifeDuration=99999;
+  buildClouds(tAI.pos.x,tAI.pos.z);
+  buildTornadoMesh(tAI.type,tAI.ef);
+  tornadoGroup.visible=true; storm.phase='tornado'; storm.active=true;
+  nextStormIn=99999;
+  document.getElementById('tornado-type-label').textContent=TORNADO_TYPES[tAI.type].name+' – '+EF_SCALE[tAI.ef].label;
+  setStormStatus('SURVIVAL STORM','#ff4444');
+  document.getElementById('top-bar').style.opacity='0.3';
+  document.getElementById('storm-bar').style.display='none';
+  document.getElementById('survival-bar').style.display='flex';
+}
+
+function endSurvival(){
+  survivalMode=false;
+  activeCamera=camMode==='follow'?followCam:topCam;
+  document.exitPointerLock();
+  buildings.forEach(bd=>{ if(!bd.destroyed){ bd.meshes[0].material.opacity=1; } });
+  document.getElementById('survival-bar').style.display='none';
+  document.getElementById('top-bar').style.opacity='1';
+  document.getElementById('storm-bar').style.display='';
+  const m=Math.floor(survivalTimer/60),s=Math.floor(survivalTimer%60);
+  popup('SURVIVED '+m+':'+(s<10?'0':'')+s+'!','#ffcc00');
+  dissipate(); nextStormIn=30;
+}
+
 // ─── GARAGE SHOP ─────────────────────────────────────────────
 let shopOpen=false;
 
@@ -942,6 +1024,13 @@ function renderShop() {
     }
     grid.appendChild(card);
   });
+
+  // Survival mode button (below vehicle grid)
+  const survBtn = document.createElement('button');
+  survBtn.style.cssText='width:100%;max-width:900px;margin-top:14px;padding:14px;border-radius:8px;border:1px solid rgba(255,80,30,0.5);background:rgba(255,60,10,0.12);color:#ff8866;font-family:\'Courier New\',monospace;font-size:14px;font-weight:bold;cursor:pointer;letter-spacing:2px;text-transform:uppercase;';
+  survBtn.textContent='⚠  SURVIVAL MODE — ON FOOT, TORNADOS TARGET TOWN';
+  survBtn.addEventListener('click', startSurvival);
+  document.getElementById('vehicle-grid').after(survBtn);
 }
 
 // ─── CONTROLS ────────────────────────────────────────────────
@@ -950,7 +1039,7 @@ document.addEventListener('keydown',e=>{
   if(keys[e.code])return; keys[e.code]=true;
   if(e.code==='Tab'){e.preventDefault();toggleCam();}
   if(e.code==='KeyE')handleProbeKey();
-  if(e.code==='KeyG'){if(shopOpen)closeShop();else tryGarage();}
+  if(e.code==='KeyG'){if(survivalMode)endSurvival();else if(shopOpen)closeShop();else tryGarage();}
   if(e.code==='Escape')closeShop();
 });
 document.addEventListener('keyup',e=>{keys[e.code]=false;});
@@ -1004,6 +1093,42 @@ function update(dt){
   dt=Math.min(dt,0.05);
   const veh=VEHICLES[curVehicle];
 
+  // ── SURVIVAL FOOT MOVEMENT ──
+  if(survivalMode){
+    survivalTimer+=dt;
+    const wspd=6;
+    const fwd=new THREE.Vector3(-Math.sin(footPlayer.yaw),0,-Math.cos(footPlayer.yaw));
+    const right=new THREE.Vector3(-Math.cos(footPlayer.yaw),0,Math.sin(footPlayer.yaw));
+    const walk=new THREE.Vector3();
+    if(keys['KeyW']||keys['ArrowUp'])   walk.addScaledVector(fwd,1);
+    if(keys['KeyS']||keys['ArrowDown']) walk.addScaledVector(fwd,-1);
+    if(keys['KeyA']||keys['ArrowLeft']) walk.addScaledVector(right,-1);
+    if(keys['KeyD']||keys['ArrowRight'])walk.addScaledVector(right,1);
+    if(walk.length()>0) walk.normalize().multiplyScalar(wspd*dt);
+    footPlayer.pos.add(walk);
+    footPlayer.pos.x=Math.max(-940,Math.min(940,footPlayer.pos.x));
+    footPlayer.pos.z=Math.max(-940,Math.min(940,footPlayer.pos.z));
+
+    // Building transparency — walls fade when player is inside
+    buildings.forEach(bd=>{
+      if(bd.destroyed) return;
+      const inside=Math.abs(footPlayer.pos.x-bd.x)<bd.w/2-0.3&&Math.abs(footPlayer.pos.z-bd.z)<bd.d/2-0.3;
+      bd.meshes[0].material.opacity = inside ? 0.12 : 1;
+    });
+
+    // fpCam position and orientation
+    fpCam.position.set(footPlayer.pos.x, footPlayer.pos.y+1.65, footPlayer.pos.z);
+    fpCam.rotation.order='YXZ';
+    fpCam.rotation.y=footPlayer.yaw;
+    fpCam.rotation.x=footPlayer.pitch;
+
+    // Survival timer HUD
+    const sm=Math.floor(survivalTimer/60), ss=Math.floor(survivalTimer%60);
+    document.getElementById('surv-timer').textContent=sm+':'+(ss<10?'0':'')+ss;
+    document.getElementById('surv-health-bar').style.width=Math.max(0,survivalHealth)+'%';
+  }
+
+  if(!survivalMode){
   const throttle=(keys['KeyW']||keys['ArrowUp']?1:0)-(keys['KeyS']||keys['ArrowDown']?1:0);
   const turn=(keys['KeyA']||keys['ArrowLeft']?1:0)-(keys['KeyD']||keys['ArrowRight']?1:0);
 
@@ -1043,6 +1168,7 @@ function update(dt){
 
   vMeshes[curVehicle].position.set(player.pos.x, carY, player.pos.z);
   vMeshes[curVehicle].rotation.y=player.angle;
+  } // end !survivalMode
 
   // Storm machine
   nextStormIn-=dt;
@@ -1126,8 +1252,26 @@ function update(dt){
     timerEl.textContent=mins+':'+(secs<10?'0':'')+secs;
     timerEl.className=remaining<15?'urgent':'';
 
+    // Survival mode: steer tornado toward town + damage foot player
+    if(survivalMode){
+      const toTx=-tAI.pos.x*0.012, toTz=-tAI.pos.z*0.012;
+      tAI.heading=Math.atan2(Math.sin(tAI.heading)*0.85+toTx, Math.cos(tAI.heading)*0.85+toTz);
+      const sfx=footPlayer.pos.x-tAI.pos.x, sfz=footPlayer.pos.z-tAI.pos.z;
+      const sfDist=Math.sqrt(sfx*sfx+sfz*sfz);
+      const survDangerR=type.dangerRadius*ef.sizeMult*2.5;
+      if(sfDist<survDangerR){
+        const inBuilding=buildings.some(bd=>!bd.destroyed&&
+          Math.abs(footPlayer.pos.x-bd.x)<bd.w/2-0.3&&Math.abs(footPlayer.pos.z-bd.z)<bd.d/2-0.3);
+        const dmg=(1-sfDist/survDangerR)*ef.sizeMult*18*dt*(inBuilding?0.15:1);
+        survivalHealth-=dmg;
+        document.getElementById('surv-shelter').textContent=inBuilding?'SHELTERING — PROTECTED':'';
+        if(survivalHealth<=0){ endSurvival(); return; }
+      } else { document.getElementById('surv-shelter').textContent=''; }
+    }
+
     // Distance & danger
-    const dx=player.pos.x-tAI.pos.x, dz=player.pos.z-tAI.pos.z;
+    const dx=(survivalMode?footPlayer.pos.x:player.pos.x)-tAI.pos.x;
+    const dz=(survivalMode?footPlayer.pos.z:player.pos.z)-tAI.pos.z;
     const dist=Math.sqrt(dx*dx+dz*dz);
     const dangerR=type.dangerRadius*ef.sizeMult;
     document.getElementById('tornado-dist').textContent=Math.floor(dist)+'m';
@@ -1179,14 +1323,15 @@ function update(dt){
     document.getElementById('danger-val').className='hud-value green';
   }
 
-  document.getElementById('garage-prompt').style.display=player.pos.distanceTo(GARAGE_POS)<45?'block':'none';
-  document.getElementById('speed-val').textContent=Math.floor(Math.abs(player.speed)*2.237)+' mph';
-
-  if(camMode==='follow'){
-    const target=player.pos.clone().add(new THREE.Vector3(-Math.sin(player.angle)*14,6,-Math.cos(player.angle)*14));
-    followCam.position.lerp(target,0.12); followCam.lookAt(player.pos.x,1.5,player.pos.z);
-  } else {
-    topCam.position.set(player.pos.x,220,player.pos.z+90); topCam.lookAt(player.pos.x,0,player.pos.z);
+  if(!survivalMode){
+    document.getElementById('garage-prompt').style.display=player.pos.distanceTo(GARAGE_POS)<45?'block':'none';
+    document.getElementById('speed-val').textContent=Math.floor(Math.abs(player.speed)*2.237)+' mph';
+    if(camMode==='follow'){
+      const target=player.pos.clone().add(new THREE.Vector3(-Math.sin(player.angle)*14,6,-Math.cos(player.angle)*14));
+      followCam.position.lerp(target,0.12); followCam.lookAt(player.pos.x,1.5,player.pos.z);
+    } else {
+      topCam.position.set(player.pos.x,220,player.pos.z+90); topCam.lookAt(player.pos.x,0,player.pos.z);
+    }
   }
 }
 
@@ -1194,8 +1339,8 @@ function update(dt){
 function animate(){requestAnimationFrame(animate);update(clock.getDelta());renderer.render(scene,activeCamera);}
 
 window.addEventListener('resize',()=>{
-  followCam.aspect=topCam.aspect=window.innerWidth/window.innerHeight;
-  followCam.updateProjectionMatrix(); topCam.updateProjectionMatrix();
+  followCam.aspect=topCam.aspect=fpCam.aspect=window.innerWidth/window.innerHeight;
+  followCam.updateProjectionMatrix(); topCam.updateProjectionMatrix(); fpCam.updateProjectionMatrix();
   renderer.setSize(window.innerWidth,window.innerHeight);
 });
 
