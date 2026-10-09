@@ -448,6 +448,11 @@ const buildingBoxes = [];
 const buildings = [];
 
 const interiorFloorMat = new THREE.MeshLambertMaterial({color:0x7a6a58});
+const doorMat = new THREE.MeshLambertMaterial({color:0x5c3d1e, side:THREE.DoubleSide, polygonOffset:true, polygonOffsetFactor:-1, polygonOffsetUnits:-1});
+const winMat  = new THREE.MeshLambertMaterial({color:0x99bbdd, side:THREE.DoubleSide, transparent:true, opacity:0.65, polygonOffset:true, polygonOffsetFactor:-1, polygonOffsetUnits:-1});
+const tableMat = new THREE.MeshLambertMaterial({color:0x8b6340});
+const chairMat = new THREE.MeshLambertMaterial({color:0x6a4a2a});
+
 function building(x, z, w, h, d, fixed=false) {
   const wallMat = bMats[Math.floor(Math.random()*bMats.length)].clone();
   wallMat.side = THREE.DoubleSide; wallMat.transparent = true; wallMat.opacity = 1;
@@ -458,9 +463,52 @@ function building(x, z, w, h, d, fixed=false) {
   const iFloor = new THREE.Mesh(new THREE.PlaneGeometry(w-0.5, d-0.5), interiorFloorMat);
   iFloor.rotation.x = -Math.PI/2; iFloor.position.set(x, 0.08, z);
   scene.add(iFloor);
+
+  const decor = [];
+  // Door on south face
+  const door = new THREE.Mesh(new THREE.PlaneGeometry(1.4, Math.min(2.3, h-0.2)), doorMat);
+  door.position.set(x, Math.min(1.15, (h-0.2)/2), z + d/2 + 0.01);
+  decor.push(door);
+  // Windows on each face
+  const winH = Math.min(1.2, h*0.35), winW = 1.4;
+  [[-1,0],[1,0],[0,-1],[0,1]].forEach(([nx,nz],fi) => {
+    const isSouth = fi===3;
+    const numWin = isSouth ? 1 : Math.floor(Math.random()*2)+1;
+    for(let wi=0;wi<numWin;wi++){
+      const win = new THREE.Mesh(new THREE.PlaneGeometry(winW, winH), winMat);
+      const offs = numWin===1 ? 0 : (wi/(numWin-1)-0.5)*(Math.max(w,d)*0.45);
+      const wx = x + nx*(Math.max(w,d)/2*0.5+0.01) + (nz!==0?offs:0);
+      const wz = z + nz*(Math.max(w,d)/2*0.5+0.01) + (nx!==0?offs:0);
+      win.position.set(wx, h*0.55, wz);
+      if(nz!==0) { /* front/back faces — no rotation needed for x-facing normals */ }
+      if(nx!==0) win.rotation.y = Math.PI/2;
+      decor.push(win);
+    }
+  });
+  // Table
+  const tW=1.6,tD=1.0,tH=0.08,tLeg=0.65;
+  const tTop = new THREE.Mesh(new THREE.BoxGeometry(tW,tH,tD), tableMat);
+  tTop.position.set(x, tLeg+tH/2, z);
+  decor.push(tTop);
+  [[tW/2-0.1,tD/2-0.1],[-(tW/2-0.1),tD/2-0.1],[tW/2-0.1,-(tD/2-0.1)],[-(tW/2-0.1),-(tD/2-0.1)]].forEach(([lx,lz])=>{
+    const leg = new THREE.Mesh(new THREE.BoxGeometry(0.08,tLeg,0.08), tableMat);
+    leg.position.set(x+lx, tLeg/2, z+lz);
+    decor.push(leg);
+  });
+  // Chairs
+  [[-tW/2-0.6,0],[tW/2+0.6,0]].forEach(([cx,cz])=>{
+    const seat = new THREE.Mesh(new THREE.BoxGeometry(0.5,0.07,0.5), chairMat);
+    seat.position.set(x+cx, 0.45, z+cz);
+    decor.push(seat);
+    const back = new THREE.Mesh(new THREE.BoxGeometry(0.5,0.5,0.06), chairMat);
+    back.position.set(x+cx, 0.7, z+cz+(cx<0?0.22:-0.22));
+    decor.push(back);
+  });
+  decor.forEach(m => scene.add(m));
+
   const boxIdx = buildingBoxes.length;
   buildingBoxes.push({ cx:x, cz:z, hw:w/2+1.5, hd:d/2+1.5 });
-  buildings.push({ meshes:[b,r], iFloor, boxIdx, x, z, w, h, d, health:100, destroyed:false, fixed });
+  buildings.push({ meshes:[b,r], iFloor, decorMeshes:decor, boxIdx, x, z, w, h, d, health:100, destroyed:false, fixed });
 }
 
 function collapseBuilding(bd) {
@@ -468,6 +516,7 @@ function collapseBuilding(bd) {
   bd.destroyed = true;
   bd.meshes.forEach(m => scene.remove(m));
   if(bd.iFloor) scene.remove(bd.iFloor);
+  if(bd.decorMeshes) bd.decorMeshes.forEach(m => scene.remove(m));
   const rubble = new THREE.Mesh(new THREE.BoxGeometry(bd.w, 0.7, bd.d), rubbleMat);
   rubble.position.set(bd.x, 0.35, bd.z); scene.add(rubble);
   bd.rubbleMesh = rubble;
@@ -485,6 +534,7 @@ function rebuildBuildings() {
     if(bd.rubbleMesh){ scene.remove(bd.rubbleMesh); bd.rubbleMesh=null; }
     bd.meshes.forEach(m => scene.add(m));
     if(bd.iFloor) scene.add(bd.iFloor);
+    if(bd.decorMeshes) bd.decorMeshes.forEach(m => scene.add(m));
     buildingBoxes[bd.boxIdx] = { cx:bd.x, cz:bd.z, hw:bd.w/2+1.5, hd:bd.d/2+1.5 };
   });
   renderShop();
@@ -907,6 +957,16 @@ function dissipate() {
   document.getElementById('tornado-timer').textContent='';
   document.getElementById('tornado-timer').className='';
   storm.phase='dissipating'; setStormStatus('TORNADO DISSIPATED','#88aaff');
+  if(survivalMode){
+    buildings.filter(bd=>bd.destroyed&&!bd.fixed).forEach(bd=>{
+      bd.destroyed=false; bd.health=100;
+      if(bd.rubbleMesh){ scene.remove(bd.rubbleMesh); bd.rubbleMesh=null; }
+      bd.meshes.forEach(m=>scene.add(m));
+      if(bd.iFloor) scene.add(bd.iFloor);
+      if(bd.decorMeshes) bd.decorMeshes.forEach(m=>scene.add(m));
+      buildingBoxes[bd.boxIdx]={cx:bd.x,cz:bd.z,hw:bd.w/2+1.5,hd:bd.d/2+1.5};
+    });
+  }
 }
 function setStormStatus(t,c){document.getElementById('storm-status').textContent=t;document.getElementById('storm-status').style.color=c;}
 
@@ -1254,7 +1314,7 @@ function update(dt){
 
     // Survival mode: steer tornado toward town + damage foot player
     if(survivalMode){
-      const toTx=-tAI.pos.x*0.012, toTz=-tAI.pos.z*0.012;
+      const toTx=-tAI.pos.x*0.012, toTz=tAI.pos.z*0.012;
       tAI.heading=Math.atan2(Math.sin(tAI.heading)*0.85+toTx, Math.cos(tAI.heading)*0.85+toTz);
       const sfx=footPlayer.pos.x-tAI.pos.x, sfz=footPlayer.pos.z-tAI.pos.z;
       const sfDist=Math.sqrt(sfx*sfx+sfz*sfz);
